@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buchungssätze-Quiz · Aleks Bechter</title>
+<meta name="description" content="Interaktives Lern-Quiz für Buchungssätze. 76 Geschäftsfälle aus drei Firmen, drei Schwierigkeitsstufen, Spaced Repetition.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230066FF'/%3E%3Ctext x='50' y='68' font-family='Inter,sans-serif' font-size='56' font-weight='800' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#fafafa;--bg-card:#fff;--text:#0a0a0a;--text-2:#525252;--text-3:#a3a3a3;
+    --line:#e5e5e5;--accent:#0066FF;--accent-soft:rgba(0,102,255,.08);
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --sans:'Inter',-apple-system,sans-serif;
+  }
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+  
+  nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(20px) saturate(180%);background:rgba(250,250,250,.85);border-bottom:1px solid var(--line)}
+  .nav-inner{max-width:1100px;margin:0 auto;padding:14px 28px;display:flex;justify-content:space-between;align-items:center}
+  .nav-logo{font-family:var(--mono);font-weight:600;font-size:14px;color:var(--text);text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+  .back-link{font-size:14px;color:var(--text-2);text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:color .15s}
+  .back-link:hover{color:var(--accent)}
+  
+  main{max-width:1100px;margin:0 auto;padding:60px 28px}
+  @media(max-width:640px){main{padding:40px 24px}}
+  
+  .hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:500;color:var(--accent);background:var(--accent-soft);padding:6px 12px;border-radius:100px;margin-bottom:20px}
+  .hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:#10B981;box-shadow:0 0 0 3px rgba(16,185,129,.2)}
+  
+  h1{font-size:clamp(36px,6vw,56px);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:20px}
+  .lead{font-size:clamp(17px,2vw,20px);color:var(--text-2);max-width:680px;margin-bottom:32px}
+  
+  .meta-row{display:flex;flex-wrap:wrap;gap:24px;font-family:var(--mono);font-size:13px;color:var(--text-3);margin-bottom:48px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+  .meta-row span{display:inline-flex;align-items:center;gap:6px}
+  .meta-row span::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--text-3)}
+  .meta-row span:first-child::before{display:none}
+  
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:60px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:10px;font-size:15px;font-weight:600;text-decoration:none;font-family:inherit;transition:transform .15s,background .15s;cursor:pointer;border:none}
+  .btn-primary{background:var(--text);color:var(--bg)}
+  .btn-primary:hover{transform:translateY(-1px);background:#000}
+  .btn-secondary{background:var(--bg-card);color:var(--text);border:1px solid var(--line)}
+  .btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+  
+  .section-label{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.12em;margin-bottom:12px;display:inline-flex;align-items:center;gap:8px;margin-top:48px}
+  .section-label::before{content:'';width:20px;height:1px;background:var(--accent)}
+  h2{font-size:clamp(24px,3vw,32px);font-weight:700;letter-spacing:-.02em;margin-bottom:20px;line-height:1.2}
+  
+  .story{font-size:17px;color:var(--text-2);line-height:1.75;max-width:720px;margin-bottom:24px}
+  .story strong{color:var(--text)}
+  
+  .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:32px 0}
+  .feature{background:var(--bg-card);border:1px solid var(--line);border-radius:12px;padding:20px;transition:transform .15s,border-color .15s}
+  .feature:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .feature .num{font-family:var(--mono);font-size:32px;font-weight:700;color:var(--accent);line-height:1;margin-bottom:8px;display:block}
+  .feature .lbl{font-size:14px;font-weight:600;margin-bottom:4px}
+  .feature .desc{font-size:13px;color:var(--text-2)}
+  
+  .firmen-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:24px 0 48px}
+  .firma-card{background:var(--bg-card);border:1px solid var(--line);border-radius:12px;padding:20px}
+  .firma-card .ico{font-size:32px;display:block;margin-bottom:8px}
+  .firma-card .nm{font-weight:700;font-size:15px;margin-bottom:4px}
+  .firma-card .ds{font-size:13px;color:var(--text-2);line-height:1.5}
+  
+  .topic-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin:20px 0 48px}
+  .topic-pill{background:var(--bg-card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;transition:border-color .15s}
+  .topic-pill:hover{border-color:var(--accent)}
+  .topic-pill .nm{font-size:14px;font-weight:600}
+  .topic-pill .cnt{font-family:var(--mono);font-size:12px;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:6px;font-weight:600}
+  
+  .embed-wrap{margin-top:32px;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--bg-card);box-shadow:0 8px 32px -8px rgba(0,0,0,.08)}
+  .embed-bar{background:#f5f5f5;border-bottom:1px solid var(--line);padding:10px 14px;display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text-3)}
+  .embed-bar .dot{width:11px;height:11px;border-radius:50%}
+  .embed-bar .dot:nth-child(1){background:#ff5f56}
+  .embed-bar .dot:nth-child(2){background:#ffbd2e}
+  .embed-bar .dot:nth-child(3){background:#27c93f}
+  .embed-bar .url{margin-left:8px;flex:1;text-align:center}
+  iframe{width:100%;height:800px;border:none;display:block;background:white}
+  
+  .next-actions{margin-top:60px;padding-top:40px;border-top:1px solid var(--line);display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+  .next-actions p{color:var(--text-2);font-size:14px}
+  
+  footer{border-top:1px solid var(--line);padding:32px 28px;margin-top:60px;font-family:var(--mono);font-size:12px;color:var(--text-3);text-align:center}
+  footer a{color:var(--text-3);text-decoration:none}
+  footer a:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">aleks.bechter</a>
+    <a href="../index.html" class="back-link">← zurück</a>
+  </div>
+</nav>
+
+<main>
+  <div class="hero-tag">Apps · Live</div>
+  <h1>Buchungssätze-Quiz</h1>
+  <p class="lead">Ein interaktives Lern-Quiz mit 76 Geschäftsfällen aus drei Firmen, Drag &amp; Drop, drei Schwierigkeitsstufen und einem System, das sich merkt, wo ich noch wackelig bin.</p>
+  
+  <div class="meta-row">
+    <span>Status: Live</span>
+    <span>76 Fälle</span>
+    <span>3 Firmen</span>
+    <span>7 Themen</span>
+    <span>HTML / JS</span>
+  </div>
+  
+  <div class="cta-row">
+    <a href="buchungssaetze_quiz.html" class="btn btn-primary">Quiz starten →</a>
+    <a href="#warum" class="btn btn-secondary">Warum ich das gebaut habe</a>
+  </div>
+
+  <!-- WARUM -->
+  <div id="warum"></div>
+  <span class="section-label">Hintergrund</span>
+  <h2>Warum ich das gebaut habe.</h2>
+  <p class="story">In der zweiten HAK lerne ich gerade <strong>Buchungssätze</strong> — wie man Geschäftsfälle richtig in Soll und Haben einträgt. Lehrbuch und Schulübungen sind ok, aber:</p>
+  <p class="story">Ich wollte <strong>realistische Fälle</strong>, die nach echten Firmen klingen. Ich wollte ein System, das sich merkt, <strong>welche Fälle ich noch nicht kann</strong>, und mir gezielt diese vorlegt — nicht zufällige.</p>
+  <p class="story">Also habe ich mit <strong>Claude AI</strong> Schritt für Schritt mein eigenes Quiz gebaut. Ich definiere die Inhalte (basierend auf meinen Schulnotizen), Claude hilft mit dem Code. Das Quiz lernt mit mir mit — und wenn meine Schule eine neue Methode lehrt, passe ich es einfach an.</p>
+
+  <!-- FEATURES -->
+  <span class="section-label">Funktionen</span>
+  <h2>Was es kann.</h2>
+  <div class="features-grid">
+    <div class="feature">
+      <span class="num">76</span>
+      <span class="lbl">Geschäftsfälle</span>
+      <span class="desc">Von einfachen Wareneinkäufen bis zu komplexen FX-Buchungen mit Kursdifferenz.</span>
+    </div>
+    <div class="feature">
+      <span class="num">3</span>
+      <span class="lbl">Schwierigkeitsstufen</span>
+      <span class="desc">Nasenbohrer, Checker und Blitzkneisser — je nach Lernziel.</span>
+    </div>
+    <div class="feature">
+      <span class="num">7</span>
+      <span class="lbl">Themen</span>
+      <span class="desc">Skonti, Bezugskosten, Rücksendungen, Spesen, Auslandsgeschäfte, Produktion, Anlagen.</span>
+    </div>
+    <div class="feature">
+      <span class="num">∞</span>
+      <span class="lbl">Spaced Repetition</span>
+      <span class="desc">Das Quiz merkt sich, was ich kann — und legt mir gezielt vor, was ich noch nicht kann.</span>
+    </div>
+  </div>
+
+  <!-- FIRMEN -->
+  <span class="section-label">Drei fiktive Firmen</span>
+  <h2>Mit denen ich übe.</h2>
+  <div class="firmen-grid">
+    <div class="firma-card">
+      <span class="ico">🧼</span>
+      <span class="nm">Le Savon</span>
+      <span class="ds">Junior Company aus der Schule. Seifenproduktion in Wien — Rohstoffe, Hilfsstoffe, Fertigerzeugnisse.</span>
+    </div>
+    <div class="firma-card">
+      <span class="ico">📱</span>
+      <span class="nm">Aleks iPhone Import/Export GmbH</span>
+      <span class="ds">Apple-Großhandel. Imports aus USA, Japan, China. Exports in die ganze EU — viel FX und Reverse Charge.</span>
+    </div>
+    <div class="firma-card">
+      <span class="ico">👟</span>
+      <span class="nm">Aleks-Sneakers GmbH</span>
+      <span class="ds">Sneaker-Handel mit Nike, Adidas, Yeezys, Jordans. Skonti, Rabatte, Reklamationen, Versandkosten.</span>
+    </div>
+  </div>
+
+  <!-- THEMEN -->
+  <span class="section-label">Was abgedeckt ist</span>
+  <h2>Die 7 Themen.</h2>
+  <div class="topic-list">
+    <div class="topic-pill"><span class="nm">Auslandsgeschäfte &amp; FX</span><span class="cnt">17</span></div>
+    <div class="topic-pill"><span class="nm">Spesen</span><span class="cnt">15</span></div>
+    <div class="topic-pill"><span class="nm">Anlagen &amp; GWG</span><span class="cnt">12</span></div>
+    <div class="topic-pill"><span class="nm">Skonti &amp; Rabatte</span><span class="cnt">10</span></div>
+    <div class="topic-pill"><span class="nm">Produktion &amp; Material</span><span class="cnt">8</span></div>
+    <div class="topic-pill"><span class="nm">Bezugs- &amp; Versandkosten</span><span class="cnt">8</span></div>
+    <div class="topic-pill"><span class="nm">Warenrücksendungen</span><span class="cnt">6</span></div>
+  </div>
+
+  <!-- TECH -->
+  <span class="section-label">Tech Stack</span>
+  <h2>Wie es gebaut ist.</h2>
+  <p class="story">Eine einzige HTML-Datei mit eingebettetem CSS und JavaScript. Kein Build-Step, keine Server, keine Dependencies — funktioniert offline und auf jedem Gerät. Lernfortschritt wird im <strong>localStorage</strong> des Browsers gespeichert.</p>
+  <p class="story">Designt im <strong>Fountainhead-Stil</strong> (Navy + Electric Blue), mobile-optimiert, mit echtem Drag &amp; Drop für die Soll/Haben-Buchungen.</p>
+
+  <div class="next-actions">
+    <p>Bereit zum Üben?</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <a href="buchungssaetze_quiz.html" class="btn btn-primary">Quiz öffnen →</a>
+      <a href="../index.html" class="btn btn-secondary">← zur Startseite</a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  © 2026 Aleksander Bechter · <a href="../index.html">aleks.bechter</a> · Built with <a href="https://claude.com">Claude</a>
+</footer>
+
+</body>
+</html>

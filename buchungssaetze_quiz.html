@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buchungssätze-Quiz · Aleks Holding</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{font-family:'Raleway',-apple-system,BlinkMacSystemFont,sans-serif;margin:0;padding:24px 16px;background:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 100%);min-height:100vh;color:#1a1a1a}
+  .wrap{max-width:860px;margin:0 auto}
+  .header{background:linear-gradient(135deg,#023962 0%,#02477B 45%,#028BF2 100%);color:#fff;padding:28px 32px;border-radius:16px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:0 10px 30px -10px rgba(2,57,98,.4)}
+  .header::before{content:'';position:absolute;top:-50%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,255,255,.1) 0%,transparent 70%);pointer-events:none}
+  .header h1{margin:0 0 6px;font-size:26px;font-weight:600;letter-spacing:-.5px}
+  .header .sub{font-size:13px;opacity:.9;letter-spacing:.3px}
+  .stats{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;position:relative;z-index:1}
+  .stat{background:rgba(255,255,255,.15);backdrop-filter:blur(10px);padding:10px 16px;border-radius:10px;font-size:12px;min-width:90px;border:1px solid rgba(255,255,255,.1)}
+  .stat strong{font-size:20px;display:block;font-family:'JetBrains Mono',monospace;font-weight:500}
+  .stat.level-stat{background:rgba(255,255,255,.25);font-weight:700}
+  .progress{height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;margin-bottom:20px}
+  .progress-fill{height:100%;background:linear-gradient(90deg,#028BF2,#023962);transition:width .4s cubic-bezier(.4,0,.2,1);border-radius:3px}
+  .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:28px;box-shadow:0 4px 12px -2px rgba(0,0,0,.04),0 2px 4px -1px rgba(0,0,0,.02)}
+  .intro h2{color:#023962;margin:0 0 6px;font-size:22px;letter-spacing:-.3px}
+  .intro p{color:#64748b;margin:0 0 18px;font-size:14px;line-height:1.6}
+  .companies{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-bottom:20px}
+  .company{padding:14px 16px;background:linear-gradient(135deg,#f8fafc,#f1f5f9);border:1px solid #e5e7eb;border-radius:10px;font-size:13px;line-height:1.5}
+  .company .ico{font-size:22px;display:block;margin-bottom:4px}
+  .company .name{font-weight:700;color:#023962;font-size:14px;margin-bottom:2px}
+  .company .desc{color:#64748b;font-size:12px}
+  .section-label{font-size:11px;color:#028BF2;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin:20px 0 10px;font-weight:700}
+  .levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:20px}
+  .level{padding:16px;background:#fff;border:2px solid #e5e7eb;border-radius:12px;cursor:pointer;transition:all .15s;text-align:center;font-family:inherit;position:relative}
+  .level:hover{border-color:#028BF2;background:#f0f9ff;transform:translateY(-2px)}
+  .level.selected{border-color:#028BF2;background:linear-gradient(135deg,#eff6ff,#dbeafe);box-shadow:0 4px 12px rgba(2,139,242,.2)}
+  .level .lico{font-size:32px;display:block;margin-bottom:6px}
+  .level .lname{font-weight:700;color:#023962;font-size:16px;margin-bottom:4px}
+  .level .ldesc{color:#64748b;font-size:11.5px;line-height:1.4}
+  .level .lcount{margin-top:8px;font-size:10px;font-family:'JetBrains Mono',monospace;color:#94a3b8;font-weight:700;letter-spacing:.5px}
+  .level.selected .lcount{color:#028BF2}
+  .topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:24px}
+  .topic{padding:12px 14px;background:#fff;border:2px solid #e5e7eb;border-radius:10px;cursor:pointer;transition:all .15s;text-align:left;font-family:inherit}
+  .topic:hover{border-color:#028BF2;background:#f0f9ff}
+  .topic.selected{border-color:#028BF2;background:linear-gradient(135deg,#eff6ff,#dbeafe);box-shadow:0 2px 8px rgba(2,139,242,.15)}
+  .topic .tname{font-weight:700;color:#023962;font-size:13px;margin-bottom:2px;display:block}
+  .topic .tcnt{color:#94a3b8;font-size:11px;font-family:'JetBrains Mono',monospace}
+  .topic.selected .tcnt{color:#028BF2}
+  .start-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:8px}
+  .selected-info{font-size:13px;color:#64748b}
+  .selected-info b{color:#023962}
+  .case-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:10px;flex-wrap:wrap}
+  .case-label{font-size:11px;color:#028BF2;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+  .case-badges{display:flex;gap:6px;flex-wrap:wrap}
+  .case-topic{display:inline-block;background:#eff6ff;color:#02477B;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;letter-spacing:.3px}
+  .case-level{display:inline-block;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.3px}
+  .case-level.nasenbohrer{background:#fef3c7;color:#854d0e}
+  .case-level.checker{background:#dbeafe;color:#1e40af}
+  .case-level.blitzkneisser{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff}
+  .case-firma{background:linear-gradient(135deg,#023962,#02477B);color:#fff;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;margin-bottom:12px}
+  .case-text{font-size:15.5px;line-height:1.65;margin-bottom:10px;color:#1e293b}
+  .case-text b{color:#023962}
+  .case-text i{color:#64748b}
+  .case-amount{font-size:18px;font-weight:700;color:#023962;margin-bottom:16px;font-family:'JetBrains Mono',monospace}
+  .case-amount .lbl{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;display:block;font-weight:600;margin-bottom:2px;font-family:'Raleway',sans-serif}
+  .calc-hint{background:linear-gradient(135deg,#fefce8,#fef9c3);border-left:4px solid #eab308;border-radius:8px;padding:11px 14px;margin-bottom:18px;font-size:12.5px;line-height:1.6;color:#713f12}
+  .calc-hint .h{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:6px;color:#854d0e;font-family:'JetBrains Mono',monospace;display:block}
+  .calc-hint code{background:rgba(255,255,255,.7);padding:1px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11.5px}
+  .tip-toggle{background:linear-gradient(135deg,#fefce8,#fef9c3);border:1px dashed #eab308;color:#854d0e;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;margin-bottom:18px;display:inline-flex;align-items:center;gap:6px;font-family:inherit;transition:all .15s}
+  .tip-toggle:hover{background:#fef3c7;border-style:solid}
+  .browser{background:linear-gradient(135deg,#f1f5f9,#e2e8f0);border-radius:12px;padding:14px;margin-bottom:20px}
+  .browser-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap}
+  .search-box{flex:1;min-width:200px;position:relative}
+  .search-box input{width:100%;padding:9px 14px 9px 36px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-family:inherit;outline:none;background:#fff;transition:all .15s}
+  .search-box input:focus{border-color:#028BF2;box-shadow:0 0 0 3px rgba(2,139,242,.12)}
+  .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:15px;font-weight:700;pointer-events:none}
+  .clear-search{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:#94a3b8;cursor:pointer;font-size:18px;padding:2px 6px;display:none}
+  .clear-search.visible{display:block}
+  .tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+  .tab{padding:6px 11px;background:#fff;border:1px solid #cbd5e1;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;transition:all .15s;font-family:'JetBrains Mono',monospace;color:#64748b;user-select:none}
+  .tab:hover{border-color:#028BF2;color:#028BF2}
+  .tab.active{background:linear-gradient(135deg,#023962,#02477B);color:#fff;border-color:#023962;box-shadow:0 2px 6px rgba(2,57,98,.25)}
+  .tab-label{font-size:10px;color:#64748b;margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;font-weight:700}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;max-height:200px;overflow-y:auto;padding:8px;background:#fff;border-radius:8px;border:1px solid #e5e7eb;align-content:flex-start}
+  .chips::-webkit-scrollbar{width:8px}
+  .chips::-webkit-scrollbar-track{background:#f1f5f9;border-radius:4px}
+  .chips::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+  .chip{background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:6px 10px;font-size:12px;cursor:grab;user-select:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px;box-shadow:0 1px 2px rgba(0,0,0,.04);max-width:100%}
+  .chip:hover{border-color:#028BF2;transform:translateY(-1px);box-shadow:0 3px 6px rgba(2,139,242,.15)}
+  .chip:active{cursor:grabbing}
+  .chip.dragging{opacity:.35}
+  .chip.placed{opacity:.3;cursor:not-allowed;pointer-events:none;background:#f1f5f9}
+  .chip .nr{font-family:'JetBrains Mono',monospace;font-weight:600;opacity:.65;font-size:10px}
+  .chip .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
+  .chips-empty{padding:30px 14px;text-align:center;color:#94a3b8;font-size:12px;width:100%}
+  .chips-count{font-size:10px;color:#94a3b8;font-family:'JetBrains Mono',monospace;padding:0 4px 6px;font-weight:600;letter-spacing:.5px}
+  .booking{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;margin-bottom:20px;align-items:stretch}
+  .zone{min-height:120px;border:2px dashed #cbd5e1;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px;background:#fafbfc;transition:all .15s}
+  .zone.over{border-color:#028BF2;background:#eff6ff;border-style:solid}
+  .zone-label{font-size:11px;font-weight:700;letter-spacing:1.5px;font-family:'JetBrains Mono',monospace}
+  .zone.soll .zone-label{color:#02477B}
+  .zone.haben .zone-label{color:#028BF2}
+  .zone-content{display:flex;flex-direction:column;gap:6px}
+  .placed-row{display:flex;gap:6px;align-items:center;background:linear-gradient(135deg,#023962,#02477B);color:#fff;border-radius:8px;padding:6px 8px 6px 10px;box-shadow:0 2px 8px rgba(2,57,98,.25);cursor:grab;user-select:none;transition:transform .1s}
+  .placed-row:hover{transform:translateY(-1px)}
+  .placed-row:active{cursor:grabbing}
+  .placed-row.dragging{opacity:.35}
+  .placed-row .label{flex:1;font-size:12px;line-height:1.3;min-width:0}
+  .placed-row .label .nr{font-family:'JetBrains Mono',monospace;font-weight:600;opacity:.85;font-size:10px;display:block}
+  .placed-row .label .nm{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .placed-row input{width:90px;padding:5px 8px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.95);color:#023962;border-radius:6px;font-size:12px;font-family:'JetBrains Mono',monospace;font-weight:600;outline:none;text-align:right}
+  .placed-row input:focus{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.4)}
+  .placed-row .remove{background:rgba(255,255,255,.15);border:none;color:#fff;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:14px;line-height:1;padding:0;display:flex;align-items:center;justify-content:center}
+  .placed-row .remove:hover{background:rgba(255,255,255,.3)}
+  .zone-sum{margin-top:auto;padding-top:8px;border-top:1px solid #e5e7eb;font-size:11px;color:#64748b;font-family:'JetBrains Mono',monospace;display:flex;justify-content:space-between;font-weight:600}
+  .zone-sum .v{color:#023962;font-size:13px}
+  .an{display:flex;align-items:center;justify-content:center;font-weight:700;color:#94a3b8;font-size:15px;padding:0 6px;font-style:italic}
+  .btn-row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px;align-items:center}
+  .btn{padding:11px 22px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .15s;letter-spacing:.2px}
+  .btn-primary{background:linear-gradient(135deg,#028BF2,#02477B);color:#fff;box-shadow:0 2px 8px rgba(2,139,242,.3)}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(2,139,242,.4)}
+  .btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none}
+  .btn-secondary{background:#fff;color:#64748b;border:1px solid #cbd5e1}
+  .btn-secondary:hover{background:#f8fafc;border-color:#94a3b8}
+  .btn-large{padding:14px 28px;font-size:15px}
+  .feedback{margin-top:18px;padding:16px 18px;border-radius:12px;font-size:14px;line-height:1.55;display:none;animation:slideIn .25s ease-out}
+  @keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+  .feedback.correct{background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-left:4px solid #10b981;color:#064e3b;display:block}
+  .feedback.wrong{background:linear-gradient(135deg,#fef2f2,#fee2e2);border-left:4px solid #ef4444;color:#7f1d1d;display:block}
+  .feedback .head{display:block;margin-bottom:6px;font-size:13px;letter-spacing:1px;text-transform:uppercase;font-weight:700}
+  .feedback .solution{margin-top:10px;padding:10px 12px;background:rgba(255,255,255,.6);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.7}
+  .feedback .explain{margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,.08);font-size:13.5px;line-height:1.65}
+  .feedback .explain b{color:#023962}
+  .feedback .esels{background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:8px;padding:10px 14px;margin-top:10px;font-size:12.5px;line-height:1.55;color:#713f12;border-left:3px solid #d97706}
+  .feedback .esels .h{font-weight:700;text-transform:uppercase;letter-spacing:1px;font-size:10px;color:#854d0e;display:block;margin-bottom:4px;font-family:'JetBrains Mono',monospace}
+  .feedback .praxis{background:linear-gradient(135deg,#e0e7ff,#c7d2fe);border-radius:8px;padding:10px 14px;margin-top:8px;font-size:12.5px;line-height:1.55;color:#312e81;border-left:3px solid #4f46e5}
+  .feedback .praxis .h{font-weight:700;text-transform:uppercase;letter-spacing:1px;font-size:10px;color:#3730a3;display:block;margin-bottom:4px;font-family:'JetBrains Mono',monospace}
+  .errlist{margin:8px 0 0 0;padding-left:18px;font-size:12.5px}
+  .errlist li{margin:3px 0}
+  .complete{text-align:center;padding:40px 24px}
+  .complete h2{color:#023962;margin:0 0 12px;font-size:28px;letter-spacing:-.5px}
+  .complete .final{font-size:56px;font-weight:700;color:#028BF2;margin:20px 0;font-family:'JetBrains Mono',monospace;letter-spacing:-1px}
+  .complete p{color:#64748b;margin-bottom:8px}
+  .complete .level-badge{display:inline-block;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;letter-spacing:.5px;margin-bottom:12px;text-transform:uppercase}
+  .footer{text-align:center;margin-top:20px;font-size:11px;color:#94a3b8;letter-spacing:.5px}
+
+  /* Stats Dashboard */
+  .stats-dashboard{margin-bottom:20px;background:linear-gradient(135deg,#f8fafc,#f1f5f9);border:1px solid #e5e7eb;border-radius:12px;padding:16px}
+  .stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}
+  .stat-box{padding:10px;background:#fff;border:2px solid #e5e7eb;border-radius:8px;text-align:center;cursor:pointer;transition:all .15s;font-family:inherit}
+  .stat-box:hover{border-color:#028BF2;transform:translateY(-1px)}
+  .stat-box.active{border-color:#028BF2;background:linear-gradient(135deg,#eff6ff,#dbeafe);box-shadow:0 2px 8px rgba(2,139,242,.15)}
+  .stat-box .ico{font-size:18px;display:block;margin-bottom:2px}
+  .stat-box .val{font-size:18px;font-weight:700;color:#023962;font-family:'JetBrains Mono',monospace;display:block;line-height:1.2}
+  .stat-box .lbl{font-size:9px;color:#64748b;font-weight:700;letter-spacing:.5px;text-transform:uppercase;display:block;margin-top:2px}
+  .stat-box.active .val{color:#028BF2}
+  .filter-info{font-size:12px;color:#64748b;text-align:center;padding:6px;border-radius:6px;background:rgba(2,139,242,.08);margin-top:6px}
+  .filter-info b{color:#023962}
+  .reset-btn{background:none;border:1px solid #e5e7eb;color:#94a3b8;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;margin-left:8px}
+  .reset-btn:hover{border-color:#ef4444;color:#ef4444}
+
+  /* Result Status Badges (Pro completion) */
+  .status-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:20px 0;text-align:left}
+  .status-card{padding:10px;background:#fff;border-radius:8px;border-left:3px solid #ccc;text-align:center}
+  .status-card .ic{font-size:20px;display:block;margin-bottom:2px}
+  .status-card .nm{font-size:11px;color:#64748b;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+  .status-card .vl{font-size:22px;font-weight:700;color:#023962;font-family:'JetBrains Mono',monospace;display:block;margin-top:2px}
+
+  @media (max-width:540px){
+    .booking{grid-template-columns:1fr;gap:8px}
+    .an{padding:4px 0;font-size:13px}
+    .header{padding:22px}.card{padding:20px}
+    .placed-row input{width:78px}
+    .tab{font-size:11px;padding:5px 9px}
+    .stats-grid{grid-template-columns:repeat(3,1fr)}
+    .status-summary{grid-template-columns:repeat(3,1fr)}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>Buchungssätze-Quiz · Aleks Holding</h1>
+    <div class="sub">Le Savon · Aleks iPhone Import/Export · Aleks-Sneakers GmbH</div>
+    <div class="stats" id="topStats" style="display:none">
+      <div class="stat level-stat"><strong id="sl">—</strong>Level</div>
+      <div class="stat"><strong id="sc">1</strong><span id="sct">von 8</span></div>
+      <div class="stat"><strong id="sp">0</strong>Geschafft</div>
+      <div class="stat"><strong id="ss">0</strong>Streak 🔥</div>
+    </div>
+  </div>
+  <div class="progress" id="topProgress" style="display:none"><div class="progress-fill" id="pf" style="width:0%"></div></div>
+  <div id="qc"></div>
+  <div class="footer">Fountainhead Digital · Lernhilfe für Aleks · 2. Jg HAK</div>
+</div>
+
+<script>
+// ============================================================
+// SCHULKONTENRAHMEN
+// ============================================================
+const kontenrahmen = {
+  "0120":"Datenverarbeitungsprogramme","0200":"Unbebaute Grundstücke","0210":"Bebaute Grundstücke",
+  "0300":"Betriebs- und Geschäftsgebäude","0400":"Maschinen","0440":"Bezugskosten Maschinen","0500":"Werkzeuge",
+  "0620":"Büromaschinen, EDV-Anlagen","0630":"Pkw und Kombi","0640":"Lkw","0641":"Elektrofahrzeuge",
+  "0660":"Betriebs- und Geschäftsausstattung","0680":"Geringwertige Wirtschaftsgüter (GWG)","0700":"Geleistete Anzahlungen für Sachanlagen",
+  "0800":"Anteile an verbundenen Unternehmen","0920":"Festverzinsliche Wertpapiere",
+  "1000":"Bezugsverrechnung","1100":"Rohstoffvorrat","1200":"Vorrat bezogene Teile","1250":"Vorrat Ersatzteile",
+  "1300":"Vorrat Hilfsstoffe","1340":"Vorrat Verpackungsmaterial","1350":"Vorrat Betriebsstoffe",
+  "1390":"Vorrat Büromaterial","1400":"Unfertige Erzeugnisse","1500":"Fertige Erzeugnisse",
+  "1600":"Handelswarenvorrat","1680":"Vorrat Emballagen","1685":"Vorrat Einwegpfand",
+  "1800":"Geleistete Anzahlungen auf Vorräte 20 %",
+  "2000":"Lieferforderungen (Kundensammelkonto)","2070":"Verrechnungskonto erhaltene Anzahlungen",
+  "2300":"Sonstige Forderungen","2320":"Gegebene Darlehen","2400":"Lohn- und Gehaltsvorschüsse",
+  "2500":"Vorsteuer","2509":"Geschuldete Einfuhrumsatzsteuer","2510":"Vorsteuer aus ig. Erwerb",
+  "2520":"Entrichtete Einfuhrumsatzsteuer","2700":"Kassa","2790":"Forderungen MasterCard",
+  "2791":"Forderungen VISA","2800":"Bank (Guthaben bei Kreditinstituten)",
+  "2870":"Barverkehr mit Banken","2880":"Schwebende Geldbewegungen",
+  "3110":"Bank (Verbindlichkeiten gegenüber Kreditinstituten)","3150":"Darlehen von einer Bank",
+  "3180":"Verbindlichkeiten Kreditkartenunternehmen","3200":"Erhaltene Anzahlungen 20 %",
+  "3300":"Lieferverbindlichkeiten (Sammelkonto)","3350":"Verrechnungskonto geleistete Anzahlungen",
+  "3500":"Umsatzsteuer","3510":"Erwerbsteuer","3520":"USt-Zahllast",
+  "3540":"Verbindlichkeiten Finanzamt","3600":"Verbindlichkeiten Gesundheitskasse",
+  "3610":"Verbindlichkeiten Gemeinde","3640":"Verbindlichkeiten SVS",
+  "3800":"Sonstige Verbindlichkeiten","3850":"Verbindlichkeiten gegen Mitarbeiter",
+  "4000":"Handelswarenerlöse 20 %","4001":"Handelswarenerlöse 10 %",
+  "4002":"Handelswarenerlöse 13 %","4003":"Handelswarenerlöse 0 %",
+  "4010":"Erlöse aus ig. Lieferung","4015":"Erlöse Exporte 0 %","4030":"Erlöse Reparaturen 20 %",
+  "4100":"Fertigerzeugniserlöse","4400":"Erlösberichtigungen 20 %","4401":"Erlösberichtigungen 10 %",
+  "4410":"Kundenskonti 20 %","4411":"Kundenskonti 10 %","4500":"Bestandsveränderungen",
+  "4600":"Erlöse aus dem Abgang von Anlagen","4810":"Mieterträge","4820":"Provisionserträge",
+  "4840":"FW-Kursgewinne","4880":"Übrige betriebliche Erträge","4890":"Mahnspesenvergütungen","4900":"Eigenverbrauch 20 %",
+  "5000":"Bezugsverrechnung","5010":"Handelswareneinsatz","5080":"Emballagen-Einsatz","5081":"Einwegpfand",
+  "5100":"Rohstoffverbrauch","5200":"Verbrauch von bezogenen Fertig- und Einzelteilen",
+  "5300":"Hilfsstoffverbrauch","5340":"Verpackungsmaterialverbrauch","5400":"Betriebsstoffverbrauch",
+  "5500":"Verbrauch von Werkzeugen, Erzeugungshilfsmitteln",
+  "5880":"Lieferantenskonti auf Wareneinkauf","5890":"Umsatzbonus auf Wareneinkauf",
+  "6000":"Fertigungslöhne","6010":"Hilfslöhne","6020":"Sonderzahlungen Arbeiter",
+  "6100":"Lehrlingseinkommen Arbeiter","6200":"Gehälter","6220":"Sonderzahlungen Angestellte",
+  "6300":"Lehrlingseinkommen Angestellte","6500":"Gesetzlicher Sozialaufwand Arbeiter",
+  "6560":"Gesetzlicher Sozialaufwand Angestellte","6600":"Dienstgeberbeitrag Arbeiter",
+  "6610":"Zuschlag zum DB Arbeiter","6620":"Kommunalsteuer Arbeiter",
+  "6660":"Dienstgeberbeitrag Angestellte","6670":"Zuschlag zum DB Angestellte",
+  "6680":"Kommunalsteuer Angestellte","6700":"Freiwilliger Sozialaufwand",
+  "7010":"Abschreibung von Sachanlagen","7030":"Abschreibung von GWG",
+  "7100":"Grundsteuer","7110":"Mautgebühren","7180":"Gebühren","7190":"Sonstige Abgaben",
+  "7200":"Instandhaltung durch Dritte","7220":"Entsorgungsaufwand",
+  "7300":"Ausgangsfrachten 20 %","7301":"Ausgangsfrachten 0 %",
+  "7310":"Paketgebühren 20 %","7311":"Paketgebühren 0 %","7320":"Pkw- und Kombi-Betriebsaufwand",
+  "7330":"Lkw-Betriebsaufwand","7381":"Telefongebühren","7390":"Portogebühren",
+  "7400":"Mietaufwand (Pachtaufwand)","7440":"Leasingaufwand betriebliche Anlagen",
+  "7450":"Leasingaufwand Pkw, Kombi","7600":"Büromaterialverbrauch",
+  "7610":"Kopien und Druckkosten","7630":"Fachliteratur und Zeitungen",
+  "7650":"Werbeaufwand","7690":"Spenden und Trinkgelder","7700":"Versicherungsaufwand",
+  "7750":"Rechtsberatungsaufwand","7755":"Steuerberatungsaufwand","7770":"Fortbildungsaufwand",
+  "7790":"Spesen des Geldverkehrs","7791":"Sonstige Bankspesen","7800":"Abschreibung von Vorräten",
+  "7819":"FW-Kursverluste","7850":"Übrige betriebliche Aufwendungen",
+  "8050":"Zinsenerträge","8100":"Zinsenerträge aus Bankguthaben","8110":"Zinsenerträge aus gewährten Darlehen",
+  "8130":"Verzugszinsenerträge","8200":"Erträge aus dem Abgang sonstiger Finanzanlagen",
+  "8280":"Zinsenaufwand für Bankkredite","8290":"Zinsenaufwand für Darlehen","8310":"Zinsenaufwand Girokonto",
+  "8300":"Verzugszinsenaufwand","8301":"Mahnspesen",
+  "9000":"Eigenkapital","9600":"Privat","9610":"Privatsteuern",
+  "9800":"Eröffnungsbilanzkonto (EBK)","9850":"Schlussbilanzkonto (SBK)","9890":"Gewinn-und-Verlust-Konto (GuV)"
+};
+const klassen={"0":"Anlagev.","1":"Vorräte","2":"Umlauf","3":"Verbind.","4":"Erträge","5":"Material","6":"Personal","7":"Sonst. Aufw.","8":"Finanz","9":"Kapital"};
+
+// ============================================================
+// GESCHÄFTSFÄLLE — 50+ präzise Fälle, alle Themen
+// ============================================================
+const allCases = [
+
+  // ════════════════════════════════════════════════════════
+  // PRODUKTION & MATERIAL (Le Savon)
+  // ════════════════════════════════════════════════════════
+  {id:'c001',firma:'savoy',topic:'produktion',difficulty:'l',
+    t:"Le Savon <b>kauft 50 kg Sheabutter</b> als Hauptrohstoff bei BioRohstoff Wien. Stückpreis: 12 €/kg netto. <b>Zahlung auf Rechnung</b> (Zahlungsziel 30 Tage), inklusive 20% österreichischer USt.",
+    meta:["50 kg × 12 € = 600 € netto","+ 20% USt = 120 €","Brutto: 720 €"],
+    g:720, s:["5100","2500"], h:["3300"],
+    sa:{"5100":600,"2500":120}, ha:{"3300":720},
+    e:"Sheabutter ist <b>der Hauptbestandteil</b> der Seife → Rohstoffverbrauch (5100). Nach Schul-Methode wird beim Einkauf direkt das Verbrauchskonto verwendet, nicht das Vorratskonto.",
+    es:"<b>Schul-Methode:</b> Material wird beim Einkauf direkt aufs Verbrauchskonto (5xxx) gebucht — nicht aufs Vorratskonto (1xxx). 5100 Rohstoffverbrauch, 5300 Hilfsstoffverbrauch, 5010 Handelswareneinsatz.",
+    pr:"In der Realität nutzen ERP-Systeme oft die Trennung Vorrat/Verbrauch, weil sie Lagerbestände sauber tracken können. Die Schul-Methode ist eine pragmatische Vereinfachung für KMUs."
+  },
+  {id:'c002',firma:'savoy',topic:'produktion',difficulty:'l',
+    t:"Le Savon <b>kauft Duftöle (Lavendel, Rose)</b> als Hilfsstoffe bei dm Drogerie. 8 Fläschchen à 25 € netto, <b>Zahlung auf Rechnung</b> mit 20% USt.",
+    meta:["8 × 25 € = 200 € netto","+ 20% USt = 40 €","Brutto: 240 €"],
+    g:240, s:["5300","2500"], h:["3300"],
+    sa:{"5300":200,"2500":40}, ha:{"3300":240},
+    e:"Duftöle gehen nur in kleinsten Mengen rein → Hilfsstoffverbrauch (5300). Nach Schul-Methode direkt aufs Verbrauchskonto.",
+    es:"<b>Eselsbrücke:</b> Hilfsstoff = <i>hilft</i> nur. Wenn du \"hilft\" einsetzen kannst (\"das Öl hilft, dass es gut riecht\"), ist es ein Hilfsstoff → 5300.",
+    pr:"Hilfsstoffe sind oft die teuersten Komponenten pro Gramm, aber wirtschaftlich weniger relevant."
+  },
+  {id:'c003',firma:'savoy',topic:'produktion',difficulty:'m',
+    t:"<b>Sammelrechnung:</b> Le Savon hat ein Paket Bienenwachs (Rohstoff) für 380 € netto und Verpackungsmaterial (Hilfsstoff) für 120 € netto bei einem Lieferanten gekauft. <b>Zahlung auf Rechnung</b>, alles mit 20% USt. Beide Materialarten zusammen auf einer Rechnung.",
+    meta:["Rohstoff: 380 €","Hilfsstoff: 120 €","Netto gesamt: 500 €","+ 20% USt = 100 €","Brutto: 600 €"],
+    g:600, s:["5100","5300","2500"], h:["3300"],
+    sa:{"5100":380,"5300":120,"2500":100}, ha:{"3300":600},
+    e:"<b>Sammelrechnung mit gemischten Materialien:</b> Jede Materialart kommt auf ihr eigenes Konto. Rohstoff → 5100, Hilfsstoff → 5300. Vorsteuer einmal für gesamten Nettobetrag.",
+    es:"<b>Bei Sammelrechnungen IMMER aufteilen:</b> 5100 für Rohstoffe, 5300 für Hilfsstoffe, 5400 für Betriebsstoffe. Die USt-Buchung erfolgt aber konsolidiert auf 2500.",
+    pr:"In der Praxis machen Buchhaltungssoftware diese Splittung automatisch anhand von hinterlegten Artikel-Zuordnungen. Bei manueller Buchung muss der Buchhalter genau auf den Rechnungsinhalt achten."
+  },
+  {id:'c004',firma:'savoy',topic:'produktion',difficulty:'l',
+    t:"Le Savon <b>bestellt 500 Stück Seifenformen und Kartonverpackungen</b> bei Verpackung24 zum Preis von 0,80 €/Stück netto. <b>Zahlung auf Rechnung</b>, 20% USt.",
+    meta:["500 × 0,80 € = 400 € netto","+ 20% USt = 80 €","Brutto: 480 €"],
+    g:480, s:["1340","2500"], h:["3300"],
+    sa:{"1340":400,"2500":80}, ha:{"3300":480},
+    e:"Verpackungsmaterial hat eigenes Konto: 1340 Vorrat Verpackungsmaterial.",
+    es:"<b>Eselsbrücke 1340 ↔ 5340:</b> Vorrat und Verbrauch haben oft dieselben letzten 3 Stellen, nur erste Ziffer ändert sich: 1 = Lager, 5 = Aufwand.",
+    pr:"Verpackung ist heute Marketing-Tool: Unboxing, Recyclebarkeit, Branding. Apple investiert mehr in Verpackungsdesign als manche Hersteller ins Produkt."
+  },
+  {id:'c005',firma:'savoy',topic:'produktion',difficulty:'m',
+    t:"Le Savon <b>verkauft 200 Stück handgefertigte Lavendelseifen</b> an den Concept Store Schauraum Wien. Stückpreis: 8 € netto, <b>Verkauf auf Rechnung</b> mit 20% USt.",
+    meta:["200 × 8 € = 1.600 € netto","+ 20% USt = 320 €","Brutto: 1.920 €"],
+    g:1920, s:["2000"], h:["4100","3500"],
+    sa:{"2000":1920}, ha:{"4100":1600,"3500":320},
+    e:"ACHTUNG: Le Savon <b>produziert selbst</b> → Fertigerzeugnisse → 4100. NICHT 4000 (Handelswarenerlöse)!",
+    es:"<b>4000 vs. 4100:</b> 4000 = gekauft & weiterverkauft. 4100 = selbst produziert. Frage: \"Hab ich was dran gemacht?\"",
+    pr:"Diese Unterscheidung ist kritisch: Rohertragsmarge bei Eigenproduktion ist meist deutlich höher als beim Handel."
+  },
+  {id:'c006',firma:'savoy',topic:'produktion',difficulty:'l',
+    t:"Le Savon <b>überweist das Lehrlingsgehalt von Lara</b> (1. Lehrjahr, kaufmännischer Bereich) in Höhe von 700 € <b>per Bank</b>. Vereinfacht ohne SV-Abzüge.",
+    meta:["Lehrlingseinkommen 700 € netto","Bankabbuchung 700 €"],
+    g:700, s:["6300"], h:["2800"],
+    sa:{"6300":700}, ha:{"2800":700},
+    e:"6300 = Lehrlingseinkommen für kaufmännische Lehrlinge (Angestellten-Bereich). Für gewerbliche Lehrlinge: 6100.",
+    es:"<b>6000er-Konten:</b> 6000 Arbeiter, 6100 Arbeiterlehrlinge, 6200 Angestellte, 6300 Angestelltenlehrlinge.",
+    pr:"Real wird ein Lehrlingsgehalt nicht einfach so überwiesen – SV, LSt, DB, DZ, KommSt müssen einbehalten werden (3. Jg. HAK)."
+  },
+  {id:'c007',firma:'savoy',topic:'produktion',difficulty:'m',
+    t:"<b>Bezugskosten beim Materialeinkauf:</b> Le Savon kauft 100 kg Olivenöl-Rohseifenbasis bei einem Lieferanten in Italien für 800 € netto. Zusätzlich verlangt der Spediteur 60 € netto Eingangsfracht. <b>Beides auf Rechnung</b>, 20% USt.",
+    meta:["Ware: 800 €","Fracht: 60 €","Netto gesamt: 860 €","+ 20% USt = 172 €","Brutto: 1.032 €"],
+    g:1032, s:["5100","2500"], h:["3300"],
+    sa:{"5100":860,"2500":172}, ha:{"3300":1032},
+    e:"<b>Bezugskosten erhöhen den Materialwert!</b> Die Eingangsfracht von 60 € geht zusammen mit dem Rohstoff (800 €) auf 5100 — den Wert der Rohstoffe insgesamt. NICHT auf ein separates Bezugskosten-Konto!",
+    es:"<b>Schul-Regel:</b> Bezugskosten erhöhen den Wert der Ware/des Materials. Also auf das gleiche Konto wie der Einkauf: 5010 bei Handelsware, 5100 bei Rohstoffen, 5300 bei Hilfsstoffen, 0... bei Anlagen.",
+    pr:"Diese Methode macht ökonomisch Sinn: Der wahre Anschaffungswert einer Ware ist Einkaufspreis PLUS alle Kosten, um sie ins Lager zu bringen. So entsteht der \"Einstandspreis\"."
+  },
+  {id:'c008',firma:'savoy',topic:'produktion',difficulty:'m',
+    t:"Le Savon <b>verkauft Seifen am Markt am Karmelitermarkt</b>. Tagesumsatz brutto: 384 € (verschiedene Sorten zu 20% USt). <b>Barzahlung in die Kassa</b>.",
+    meta:["Brutto 384 €","netto: 384 ÷ 1,20 = 320 €","USt: 384 − 320 = 64 €"],
+    g:384, s:["2700"], h:["4100","3500"],
+    sa:{"2700":384}, ha:{"4100":320,"3500":64},
+    e:"Markt-Barverkauf: Kassa (2700) im Soll brutto, Fertigerzeugniserlöse (4100) und USt (3500) im Haben. Bar = Kassa, nicht Bank.",
+    es:"<b>Brutto → Netto bei 20% USt:</b> Brutto ÷ 1,20 = Netto. ODER: Brutto × 5/6 = Netto, Brutto × 1/6 = USt. 384 ÷ 6 = 64 € USt, ×5 = 320 € netto.",
+    pr:"Marktverkäufe sind ein Klassiker für kleine Manufakturen — direkter Kundenkontakt, höhere Marge als beim Handel."
+  },
+
+  // ════════════════════════════════════════════════════════
+  // SKONTI & RABATTE (Sneakers + iPhone)
+  // ════════════════════════════════════════════════════════
+  {id:'c009',firma:'sneakers',topic:'skonti',difficulty:'l',
+    t:"Aleks-Sneakers <b>kauft 50 Paar Nike Air Force 1</b> bei Nike Austria. Stückpreis: 65 € netto, 20% USt. <b>Verkauf auf Rechnung</b> mit Zahlungsziel 30 Tage und 3% Skonto bei Zahlung binnen 10 Tagen. Hier ist nur die <b>Rechnungs-Einbuchung</b> gefragt — Zahlung folgt später.",
+    meta:["50 × 65 € = 3.250 € netto","+ 20% USt = 650 €","Brutto: 3.900 €","Skonto NOCH NICHT buchen!"],
+    g:3900, s:["5010","2500"], h:["3300"],
+    sa:{"5010":3250,"2500":650}, ha:{"3300":3900},
+    e:"<b>Wareneinkauf direkt auf 5010 Handelswareneinsatz</b> (Aufwandsmethode) + Vorsteuer im Soll, Lieferverbindlichkeit brutto im Haben. Skonto erst bei Zahlung!",
+    es:"\"<i>Skonto buchst du erst beim Konto</i>\" – also erst dann, wenn das Geld tatsächlich fließt. <b>Aufwandsmethode:</b> Wareneinkauf geht direkt in den Aufwand (5010), nicht über das Vorratskonto.",
+    pr:"3% Skonto in 20 Tagen = rund 55% Jahreszins. Immer Skonto ziehen, wenn die Liquidität reicht."
+  },
+  {id:'c010',firma:'sneakers',topic:'skonti',difficulty:'s',
+    t:"<b>Bezahlung der Nike-Rechnung mit Skontoabzug:</b> Aleks-Sneakers überweist die Nike-Rechnung über 3.900 € brutto <b>innerhalb der Skontofrist per Bank</b> und zieht 3% Skonto ab.",
+    meta:["Brutto-Skonto: 3.900 × 3% = 117 €","netto: 117 × 5/6 = 97,50 €","VSt-Korr.: 117 × 1/6 = 19,50 €","Bank: 3.900 − 117 = 3.783 €"],
+    g:3900, s:["3300"], h:["2800","5880","2500"],
+    sa:{"3300":3900}, ha:{"2800":3783,"5880":97.50,"2500":19.50},
+    e:"Lieferverbindlichkeit (3300) komplett ausgebucht. Im Haben: Bank für Zahlung, Lieferantenskonto (5880) als Wareneinsatz-Minderung, Vorsteuer-Korrektur (2500 im Haben = negative Vorsteuer).",
+    es:"<b>Skonto-Aufteilung bei 20% USt:</b> 5/6 Netto-Anteil, 1/6 USt-Korrektur. 117 € ÷ 6 = 19,50 €, ×5 = 97,50 €.",
+    pr:"BMD, RZL, DATEV machen das automatisch. Bei Schularbeiten und mündlicher Prüfung musst du es zu Fuß rechnen."
+  },
+  {id:'c011',firma:'sneakers',topic:'skonti',difficulty:'m',
+    t:"Aleks-Sneakers <b>verkauft 20 Paar Adidas Samba OG</b> an Sport2000. Listenpreis 95 €/Paar netto. Auf der Rechnung wird ein <b>Mengenrabatt von 5% direkt abgezogen</b>. <b>Verkauf auf Rechnung</b>, 20% USt.",
+    meta:["20 × 95 € = 1.900 € Listenpreis","− 5% Rabatt = 95 €","Netto-Rechnung: 1.805 €","+ 20% USt = 361 € → Brutto 2.166 €"],
+    g:2166, s:["2000"], h:["4000","3500"],
+    sa:{"2000":2166}, ha:{"4000":1805,"3500":361},
+    e:"Rabatt auf der Rechnung wird direkt vom Nettowert abgezogen – KEIN eigenes Konto. Nur Skonti werden separat gebucht.",
+    es:"<b>Rabatt vs. Skonto:</b> Rabatt = <i>R</i>echnung (auf der Rechnung selbst). Skonto = <i>S</i>chnellzahler-Bonus (nachträglich).",
+    pr:"Mengenrabatt = Preisverhandlung VOR Rechnung. Skonto = Belohnung NACH Rechnung für schnelle Zahlung — Liquiditätsmanagement."
+  },
+  {id:'c012',firma:'sneakers',topic:'skonti',difficulty:'s',
+    t:"<b>Zahlungseingang mit Kundenskonto:</b> Foot Locker zahlt <b>per Bank</b> eine offene Rechnung über 1.800 € brutto und zieht das vereinbarte <b>Kundenskonto von 2%</b> ab.",
+    meta:["Brutto-Skonto: 1.800 × 2% = 36 €","netto: 36 × 5/6 = 30 €","USt-Korr.: 36 × 1/6 = 6 €","Eingang: 1.800 − 36 = 1.764 €"],
+    g:1800, s:["2800","4410","3500"], h:["2000"],
+    sa:{"2800":1764,"4410":30,"3500":6}, ha:{"2000":1800},
+    e:"Forderung komplett ausgebucht. Im Soll: Bank, Kundenskonto (4410) als Erlösminderung, USt-Korrektur (3500 im Soll = Reduktion).",
+    es:"<b>Eselsbrücke:</b> Skonto WIR geben → 4410 (Erlösminderung). Skonto WIR bekommen → 5880 (Materialaufwand-Minderung). 4xxx = Erlöse, 5xxx = Material.",
+    pr:"Kundenskonto ist Marketing + Liquiditätshebel: 2% her, dafür 20 Tage früher Cash. Entscheidend für Working-Capital-Planung."
+  },
+  {id:'c013',firma:'sneakers',topic:'skonti',difficulty:'m',
+    t:"Ein Kunde zahlt im Sneakers-Store ein Paar Air Jordan 4 <b>mit VISA-Kreditkarte über 250 € brutto</b>. Es entsteht eine Forderung gegen VISA, im Verkaufspreis 20% USt.",
+    meta:["Brutto: 250 €","netto: 250 ÷ 1,20 = 208,33 €","USt: 250 − 208,33 = 41,67 €"],
+    g:250, s:["2791"], h:["4000","3500"],
+    sa:{"2791":250}, ha:{"4000":208.33,"3500":41.67},
+    e:"<b>Kreditkartenverkauf:</b> Forderung gegen Kreditkartenunternehmen (2791 Forderungen VISA) im Soll.",
+    es:"<b>Kreditkarten-Konten:</b> 2790 MasterCard, 2791 VISA, 2792 Diners, 2793 Amex, 2794 Debitkarte.",
+    pr:"VISA/MasterCard: 1–3% Gebühr. Bei 30% Marge auf 250-€-Sneaker = fast 10% der Marge weg. Amex 3,5–4% — darum lehnen kleine Läden Amex oft ab."
+  },
+  {id:'c014',firma:'sneakers',topic:'skonti',difficulty:'l',
+    t:"Aleks-Sneakers gewährt einem Sportverein einen <b>Sonderrabatt von 200 € netto</b> auf einen Großauftrag direkt auf der Rechnung. Ursprünglicher Listenpreis: 2.500 € netto, Rabatt also schon abgezogen. Endbetrag: 2.300 € netto + 20% USt = 2.760 €. <b>Verkauf auf Rechnung</b>.",
+    meta:["Netto-Rechnung: 2.300 €","+ 20% USt = 460 €","Brutto: 2.760 €","(Rabatt schon abgezogen!)"],
+    g:2760, s:["2000"], h:["4000","3500"],
+    sa:{"2000":2760}, ha:{"4000":2300,"3500":460},
+    e:"Rabatt schon im Nettowert berücksichtigt. Ganz normaler Verkauf: Lieferforderung (2000) brutto im Soll, Erlös (4000) netto + USt (3500) im Haben.",
+    es:"Rabatt erscheint <b>nie</b> als eigenes Konto, egal ob Mengenrabatt, Sonderrabatt oder Treuerabatt. Wird immer direkt vom Nettowert abgezogen.",
+    pr:"Wenn man Rabatte separat buchen wollte, würden Listenpreis-Statistiken aussagekräftiger — manche Großunternehmen führen daher schattenmäßig \"Rabattkonten\" im Controlling."
+  },
+  {id:'c015',firma:'sneakers',topic:'skonti',difficulty:'m',
+    t:"<b>Restaurant-Verkauf mit 10% USt:</b> Le Savon verkauft 30 Stück Lavendelseifen an ein Bio-Hotel zum Stückpreis von 6 € netto. Da das Hotel die Seifen als Hotel-Amenity (Lebensmittel-ähnliches Naturprodukt für den Gast) nimmt, wird der reduzierte <b>USt-Satz von 10%</b> angewendet. <b>Verkauf auf Rechnung</b>.",
+    meta:["30 × 6 € = 180 € netto","+ 10% USt = 18 €","Brutto: 198 €"],
+    g:198, s:["2000"], h:["4001","3500"],
+    sa:{"2000":198}, ha:{"4001":180,"3500":18},
+    e:"<b>10% USt-Satz</b> → Erlöskonto 4001 (Handelswarenerlöse 10%), NICHT 4000 (das wäre 20%). USt-Konto bleibt 3500 für alle USt-Sätze.",
+    es:"<b>USt-Sätze 2026 in AT:</b> 20% Standard (4000), 10% Lebensmittel/Bücher (4001), 13% Tierfutter/Hotel-Übernachtung (4002), 0% steuerfrei (4003). Je nach Produkt unterschiedliche Erlös-Konten — USt-Konto immer 3500.",
+    pr:"Im Schulbuch sind 4 USt-Sätze erwähnt. Im echten Leben gibt's noch Sonderfälle (Heimhilfe, Lebensmittellieferung, etc.). Steuerberater verdienen ihr Geld auch mit der Klärung dieser Sätze."
+  },
+  {id:'c016',firma:'iphone',topic:'skonti',difficulty:'s',
+    t:"<b>Skonto mit 10% USt:</b> Aleks iPhone hat Bücher zum Thema \"iPhone Reparatur\" für 1.100 € brutto auf Rechnung gekauft (10% USt). <b>Bezahlung per Bank mit 2% Skonto</b>.",
+    meta:["Brutto-Skonto: 1.100 × 2% = 22 €","Bei 10% USt: 10/11 netto, 1/11 USt","netto: 22 × 10/11 = 20 €","VSt-Korr.: 22 × 1/11 = 2 €","Bank: 1.078 €"],
+    g:1100, s:["3300"], h:["2800","5880","2500"],
+    sa:{"3300":1100}, ha:{"2800":1078,"5880":20,"2500":2},
+    e:"Bei 10% USt funktioniert Skonto genauso, nur die Aufteilung ändert sich: 10/11 netto, 1/11 USt-Korrektur (statt 5/6 und 1/6 bei 20%).",
+    es:"<b>USt-Aufteilung bei Skonto:</b> 20% USt → 5/6 + 1/6. 10% USt → 10/11 + 1/11. 13% USt → 100/113 + 13/113. Logik: Brutto = Netto × (1 + USt-Satz).",
+    pr:"In der Realität hast du als Aleks iPhone fast nur 20% USt (Elektronik). 10% kommt nur bei Büchern, Lebensmitteln, Eintrittskarten. Wichtig zu kennen, aber selten relevant."
+  },
+  {id:'c017',firma:'iphone',topic:'skonti',difficulty:'m',
+    t:"Aleks iPhone gewährt einem Stammkunden bei einer Großbestellung einen <b>Sonderrabatt von 8%</b> auf den Listenpreis von 12.000 € netto. <b>Verkauf auf Rechnung</b>, 20% USt.",
+    meta:["12.000 × 92% = 11.040 € netto","+ 20% USt = 2.208 €","Brutto: 13.248 €"],
+    g:13248, s:["2000"], h:["4000","3500"],
+    sa:{"2000":13248}, ha:{"4000":11040,"3500":2208},
+    e:"Rabatt direkt vom Nettowert abziehen, dann USt rechnen. Normaler Verkauf danach.",
+    es:"<b>Prozent-Rabatt-Trick:</b> 8% Rabatt = 92% Restpreis. 12.000 × 0,92 = 11.040 €. Schneller als 12.000 − (12.000 × 0,08).",
+    pr:"Stammkunden-Rabatte sind oft langfristig kostengünstiger als Werbeausgaben. Apple selbst gibt 5–10% Bildungsrabatt – Investition in zukünftige Berufskäufer."
+  },
+  {id:'c018',firma:'iphone',topic:'skonti',difficulty:'s',
+    t:"<b>Zahlung mit Skonto und Bezugskosten:</b> Aleks-Sneakers überweist eine Rechnung über 2.400 € brutto bei Yeezy-Lieferant <b>per Bank mit 3% Skonto</b>. Auf der ursprünglichen Rechnung waren bereits 200 € Eingangsfracht enthalten (auf 5010 mit der Ware verbucht).",
+    meta:["Brutto-Skonto: 2.400 × 3% = 72 €","netto: 72 × 5/6 = 60 €","VSt-Korr.: 72 × 1/6 = 12 €","Bank: 2.400 − 72 = 2.328 €"],
+    g:2400, s:["3300"], h:["2800","5880","2500"],
+    sa:{"3300":2400}, ha:{"2800":2328,"5880":60,"2500":12},
+    e:"Skonto auf Gesamtrechnung (inkl. Bezugskosten). Genauso buchen wie bei reiner Wareneinkauf-Rechnung — das Konto 5880 reduziert den gesamten Material+Bezug-Aufwand.",
+    es:"<b>Wichtig:</b> Bei Aleks' Schul-Methode sind Bezugskosten bereits in 5010 enthalten. Das Skonto auf 5880 reduziert den gesamten Wareneinsatz inkl. der Bezugskosten — passt rechnerisch automatisch.",
+    pr:"Bei großen Konzernen werden Skonti per Software automatisch dem Wareneinsatz zugeschlagen — was am Jahresende bei der Inventurbewertung berücksichtigt wird."
+  },
+
+  // ════════════════════════════════════════════════════════
+  // BEZUGS- & VERSANDKOSTEN
+  // ════════════════════════════════════════════════════════
+  {id:'c019',firma:'sneakers',topic:'bezug',difficulty:'m',
+    t:"Aleks-Sneakers lässt <b>100 Paar Yeezys per DHL Express</b> ins Wiener Lager liefern. DHL stellt 180 € netto + 20% USt <b>auf Rechnung</b>. <b>Eingangsfracht</b> zum Wareneinkauf — Bezugskosten erhöhen den Wert der Handelsware.",
+    meta:["Bezugskosten 180 € netto","+ 20% USt = 36 €","Brutto: 216 €"],
+    g:216, s:["5010","2500"], h:["3300"],
+    sa:{"5010":180,"2500":36}, ha:{"3300":216},
+    e:"Bezugskosten beim WARENEINKAUF gehen direkt auf <b>5010 Handelswareneinsatz</b> – erhöhen den Wert/Einstandspreis der Ware. NICHT 7300 (das ist Ausgangsfracht beim Verkauf)!",
+    es:"<b>Schul-Methode Bezugskosten:</b> Werden auf dasselbe Konto gebucht wie die Ware/Material/Anlage selbst. <i>Warum?</i> Weil sie den Wert der Anschaffung erhöhen. Ware = 5010, Material = 5300, Anlage = 0440.",
+    pr:"Bezugskosten sind Teil der \"Total Cost of Goods\". Wer falsch zuordnet, kalkuliert systematisch zu billig."
+  },
+  {id:'c020',firma:'sneakers',topic:'bezug',difficulty:'l',
+    t:"Aleks-Sneakers <b>verschickt 30 Paar Sneakers an einen Kunden in Salzburg per Post Express</b>. Versandkosten 45 € netto + 20% USt, <b>direkt vom Bankkonto abgebucht</b>.",
+    meta:["Versandkosten 45 € netto","+ 20% USt = 9 €","Bankabbuchung: 54 €"],
+    g:54, s:["7300","2500"], h:["2800"],
+    sa:{"7300":45,"2500":9}, ha:{"2800":54},
+    e:"Ausgangsfracht (bei Verkauf) → 7300. Bank im Haben.",
+    es:"<b>Eselsbrücke 7300:</b> Klasse 7 sammelt alle \"sonstigen Aufwendungen, die nicht direkt im Produkt stecken\".",
+    pr:"Lieferbedingungen (Incoterms): \"frei Haus\" (DDP) = wir zahlen. \"ab Werk\" (EXW) = Kunde zahlt."
+  },
+  {id:'c021',firma:'sneakers',topic:'bezug',difficulty:'m',
+    t:"Aleks-Sneakers <b>versichert eine Sneaker-Lieferung gegen Transportschäden</b> bei der Wiener Städtischen. Versicherungsprämie für den Wareneinkauf: 80 € netto + 20% USt, <b>per Bank gezahlt</b>. Da es eine Versicherung BEIM Einkauf ist, gehört sie zu den Bezugskosten der Ware.",
+    meta:["80 € netto","+ 20% USt = 16 €","Bank: 96 €"],
+    g:96, s:["5010","2500"], h:["2800"],
+    sa:{"5010":80,"2500":16}, ha:{"2800":96},
+    e:"Versicherungsprämie für eine WARENLIEFERUNG → ist auch eine Bezugskost → direkt auf <b>5010</b> (Handelswareneinsatz). Wäre es eine allgemeine Betriebsversicherung → 7700.",
+    es:"<b>Bezugskosten umfassen ALLES, was nötig ist um die Ware ans Lager zu bringen:</b> Fracht, Versicherung, Verpackung, Zoll, Verzollungsgebühr. Alle landen auf demselben Konto wie die Ware (5010).",
+    pr:"In der Realität wickelt man das oft über CIF-Lieferungen ab (Cost, Insurance, Freight). Der Lieferant deckt Transport + Versicherung, ist im Warenpreis enthalten."
+  },
+  {id:'c022',firma:'iphone',topic:'bezug',difficulty:'m',
+    t:"Aleks iPhone zahlt für eine Inlandslieferung von iPhones <b>per Bank Sammelversand-Kosten</b> an die Spedition Wedl. 3 Paletten zu je 120 € netto + 20% USt = 360 € netto. Eingangsfracht zum Wareneinkauf.",
+    meta:["3 × 120 € = 360 € netto","+ 20% USt = 72 €","Bank: 432 €"],
+    g:432, s:["5010","2500"], h:["2800"],
+    sa:{"5010":360,"2500":72}, ha:{"2800":432},
+    e:"Auch Sammelversand-Kosten sind Bezugskosten beim Wareneinkauf → direkt auf <b>5010</b> (Handelswareneinsatz). Per Bank gezahlt → Bank (2800) im Haben.",
+    es:"Egal ob DHL Express, Post, Spedition, Eigentransport-Sprit – wenn's beim Wareneinkauf anfällt, geht's auf das Material-/Waren-Konto (5010 bei Handelsware).",
+    pr:"Sammelversand spart bei großen Mengen massiv Geld pro Stück. Amazon und Zalando arbeiten extrem mit Sammeltransporten – daher die niedrigen Versandkosten für Endkunden."
+  },
+  {id:'c023',firma:'sneakers',topic:'bezug',difficulty:'l',
+    t:"Aleks-Sneakers <b>verschickt eine Großbestellung per Spedition an einen Schweizer Großhändler</b>. Versandkosten 1.200 € netto, <b>steuerfrei nach § 6 UStG bei Drittland-Export</b>. <b>Zahlung per Bank</b>.",
+    meta:["1.200 € netto","Drittland-Export → 0% USt","Bank: 1.200 €"],
+    g:1200, s:["7301"], h:["2800"],
+    sa:{"7301":1200}, ha:{"2800":1200},
+    e:"Ausgangsfracht ins Drittland = steuerfreie Versandleistung → Konto 7301 (Ausgangsfrachten 0%), nicht 7300 (das ist 20%).",
+    es:"<b>7300 vs. 7301:</b> Drittel-Punkt = Sondertarif. 7300 = mit 20% USt (Inland). 7301 = ohne USt (Drittland-Export).",
+    pr:"Bei Schweiz-Lieferungen ist das Standard. Der Schweizer Kunde zahlt dann beim Import in der Schweiz die schweizerische MwSt — wir bleiben raus."
+  },
+  {id:'c024',firma:'sneakers',topic:'bezug',difficulty:'m',
+    t:"Aleks-Sneakers <b>gewährt einem Kunden \"Frei Haus\"-Lieferung</b>. Auf der Rechnung wird die Ware mit 1.500 € netto verkauft. Die Versandkosten von 80 € netto (für uns) zahlen wir selbst per Bank an die Post. Hier ist nur die <b>Versandkosten-Buchung</b> gefragt.",
+    meta:["80 € netto","+ 20% USt = 16 €","Bank: 96 €"],
+    g:96, s:["7300","2500"], h:["2800"],
+    sa:{"7300":80,"2500":16}, ha:{"2800":96},
+    e:"\"Frei Haus\" = wir tragen die Versandkosten als Aufwand. Versandkosten gehen auf 7300, weil's beim Verkauf anfällt.",
+    es:"<b>Frei-Haus vs. Ab-Werk:</b> Frei Haus → Verkäufer zahlt. Ab Werk → Käufer zahlt. Buchhalterisch unterschiedlich!",
+    pr:"\"Frei Haus\" ist ein starkes Verkaufsargument im E-Commerce, kostet aber Marge. Zalando bietet Frei-Haus für Bestellungen >24,90 € — perfekt kalkulierte Schwelle."
+  },
+  {id:'c025',firma:'iphone',topic:'bezug',difficulty:'s',
+    t:"Aleks iPhone bezahlt <b>per Bank den Zoll von 3.000 €</b> für eine Importlieferung von iPhones aus den USA an das Zollamt Wien. Zoll ist <b>kein Vorsteuer-Konto</b>, sondern landet als Bezugskost im Warenwert (Handelswareneinsatz).",
+    meta:["Zoll: 3.000 €","KEINE USt auf Zoll","Bank: 3.000 €"],
+    g:3000, s:["5010"], h:["2800"],
+    sa:{"5010":3000}, ha:{"2800":3000},
+    e:"Zoll = endgültiger Aufwand, bleibt für immer beim Staat. Geht aufs Material-Konto (<b>5010</b>) und erhöht den Einstandspreis der Ware.",
+    es:"<b>Zoll vs. EUSt:</b> Zoll = bleibt (Bezugskost → 5010, erhöht Warenwert). EUSt = Durchlaufposten (2520, holst zurück). Beide werden beim Zollamt gezahlt, aber komplett unterschiedlich gebucht!",
+    pr:"Zoll kann ein Geschäftsmodell kaputt machen. Bei iPhones aus USA: ~5% Zoll auf den Warenwert. Bei 200 iPhones × 950 € = 9.500 € Zoll. Marge muss das tragen!"
+  },
+  {id:'c026',firma:'sneakers',topic:'bezug',difficulty:'l',
+    t:"Aleks-Sneakers bezahlt <b>per Bank die Verpackungsentsorgung</b> an die ARA (Altstoff Recycling Austria). Entsorgungsgebühr für 1000 Schuhkartons: 120 € netto + 20% USt.",
+    meta:["120 € netto","+ 20% USt = 24 €","Bank: 144 €"],
+    g:144, s:["7220","2500"], h:["2800"],
+    sa:{"7220":120,"2500":24}, ha:{"2800":144},
+    e:"Entsorgungsaufwand → 7220. Ist KEIN Bezugskonto, sondern allgemeiner Aufwand (wir entsorgen ja, kommt nicht ins Produkt rein).",
+    es:"<b>Entsorgung vs. Bezug:</b> Verpackung KAUFEN → 1340 (Vorrat) oder 1000 (Bezug). Verpackung ENTSORGEN → 7220 (Aufwand). Genau umgekehrt!",
+    pr:"In Österreich gibt's eine ARA-Pflicht (Altstoff Recycling Austria) für Verpackungsabfall. Pro kg Karton: ~0,12 €. Bei großen Mengen rechnerisch relevant — viele Firmen kalkulieren das in den Endpreis ein."
+  },
+
+  // ════════════════════════════════════════════════════════
+  // WARENRÜCKSENDUNGEN
+  // ════════════════════════════════════════════════════════
+  {id:'c027',firma:'sneakers',topic:'rueck',difficulty:'m',
+    t:"<b>Warenrücksendung an Lieferant:</b> Aleks-Sneakers schickt 5 Paar defekte Nike-Sneakers an Nike Austria zurück. Nike erstellt eine <b>Gutschrift über 5 × 65 € = 325 € netto + 65 € USt</b>. Die Lieferverbindlichkeit wird entsprechend reduziert.",
+    meta:["5 × 65 € = 325 € netto","+ 20% USt = 65 €","Brutto-Gutschrift: 390 €"],
+    g:390, s:["3300"], h:["5010","2500"],
+    sa:{"3300":390}, ha:{"5010":325,"2500":65},
+    e:"Warenrücksendung = <b>umgekehrte Buchung</b> wie Einkauf. Verbindlichkeit abgebaut, Wareneinsatz (5010) reduziert, Vorsteuer storniert.",
+    es:"<b>Rücksendung:</b> Spul die Einkaufsbuchung rückwärts ab. Soll und Haben tauschen die Plätze. Konten bleiben gleich – bei Aufwandsmethode also 5010, nicht 1600.",
+    pr:"Hohe Retourenquoten sind ein KPI-Killer im E-Commerce. Zalando: Retouren 50%+ in manchen Kategorien."
+  },
+  {id:'c028',firma:'sneakers',topic:'rueck',difficulty:'s',
+    t:"<b>Kundenrücksendung:</b> Ein Kunde schickt 8 Paar Air Jordan 1 als Reklamation zurück. Wir erstellen eine <b>Gutschrift über 8 × 110 € = 880 € netto + 176 € USt</b>. Die Lieferforderung wird entsprechend reduziert.",
+    meta:["8 × 110 € = 880 € netto","+ 20% USt = 176 €","Brutto-Gutschrift: 1.056 €"],
+    g:1056, s:["4400","3500"], h:["2000"],
+    sa:{"4400":880,"3500":176}, ha:{"2000":1056},
+    e:"Kundenrücksendung: <b>Erlösberichtigung (4400)</b> statt Erlöse. USt-Schuld wird storniert (3500 im Soll = Reduktion).",
+    es:"<b>4400 vs. 4000:</b> Geh nicht auf 4000 zurück – sondern aufs Korrektur-Konto 4400. Vorteil: Am Jahresende siehst du wieviel zurückkam.",
+    pr:"Investoren wollen Brutto-Erlöse + Retouren getrennt sehen – das ist Quality-of-Revenue-Analyse."
+  },
+  {id:'c029',firma:'sneakers',topic:'rueck',difficulty:'m',
+    t:"<b>Teilrücksendung an Lieferant:</b> Von einer ursprünglich 50-stückigen Bestellung schickt Aleks-Sneakers nur 3 Paar Adidas Samba zurück (à 70 € netto). Gutschrift von Adidas: 252 € brutto (210 € netto + 42 € USt).",
+    meta:["3 × 70 € = 210 € netto","+ 20% USt = 42 €","Brutto: 252 €"],
+    g:252, s:["3300"], h:["5010","2500"],
+    sa:{"3300":252}, ha:{"5010":210,"2500":42},
+    e:"Egal ob Vollretour oder Teilretour: Buchungsmuster ist gleich, nur Beträge unterschiedlich. Verbindlichkeit anteilig abbauen, Wareneinsatz (5010) reduzieren.",
+    es:"<b>Teilretour-Logik:</b> Wenn nur ein Teil zurückgeht, betrifft die Gutschrift auch nur diesen Teil. Der Rest der Original-Rechnung bleibt offen.",
+    pr:"In ERP-Systemen wird die Retoure mit Bezug auf die Originalrechnung gebucht — dadurch sieht man am Saldenkonto präzise, was noch zu zahlen ist."
+  },
+  {id:'c030',firma:'iphone',topic:'rueck',difficulty:'s',
+    t:"<b>Rücksendung mit Bezugskosten-Korrektur:</b> Aleks iPhone schickt 10 fehlerhafte iPad Cases an einen Lieferanten zurück. Ursprünglicher Einkauf war 1.000 € netto Ware + 100 € netto Versand (= 1.100 € netto, beides auf 5010 gebucht). Gutschrift jetzt auf alles: 1.320 € brutto.",
+    meta:["1.000 € netto Ware + 100 € Bezug","= 1.100 € netto","+ 20% USt = 220 €","Brutto: 1.320 €"],
+    g:1320, s:["3300"], h:["5010","2500"],
+    sa:{"3300":1320}, ha:{"5010":1100,"2500":220},
+    e:"Bei Rücksendung wird das komplette Material-Konto 5010 reduziert (auch der Bezugskosten-Anteil). Verbindlichkeit ausgebucht, Vorsteuer storniert.",
+    es:"<b>Faustregel:</b> Da Bezugskosten bei der Schul-Methode direkt auf 5010 (oder 5300, 0440) verbucht wurden, gehen sie auch bei der Retoure einfach in einem Schwung wieder ab. Kein separates Bezugskosten-Konto, keine extra Buchung.",
+    pr:"In der Praxis machen Lieferanten oft Pauschalgutschriften ohne genaue Aufteilung. Bei der Schul-Methode kein Problem — alles geht aufs Material-Konto."
+  },
+  {id:'c031',firma:'savoy',topic:'rueck',difficulty:'m',
+    t:"<b>Rücksendung von Fertigerzeugnissen:</b> Schauraum Wien retourniert 20 Stück Lavendelseifen, weil der Duft nicht stark genug ist. Le Savon gibt eine <b>Gutschrift über 20 × 8 € = 160 € netto + 32 € USt</b>.",
+    meta:["20 × 8 € = 160 € netto","+ 20% USt = 32 €","Brutto: 192 €"],
+    g:192, s:["4400","3500"], h:["2000"],
+    sa:{"4400":160,"3500":32}, ha:{"2000":192},
+    e:"Le Savon verkauft Fertigerzeugnisse → bei Rücksendung wäre eigentlich 4400 (Erlösberichtigung 20%) das richtige Konto. Manche Schulen nutzen auch ein separates 4500-Konto für Bestandsveränderungen.",
+    es:"<b>Wichtige Spitzfindigkeit:</b> Auch bei Fertigerzeugnissen geht die Rück-Buchung über 4400, nicht über 4100. 4100 ist nur für \"frische\" Verkäufe da.",
+    pr:"Bei reklamierten Fertigerzeugnissen kommt die Produktionscontrollerin ins Spiel: Welche Charge war fehlerhaft? Welche Maschine? Welcher Mitarbeiter? Reklamationen führen oft zu Prozessverbesserungen."
+  },
+  {id:'c032',firma:'iphone',topic:'rueck',difficulty:'l',
+    t:"<b>Einfache Kundenrücksendung:</b> Ein Kunde sendet einen einzelnen Refurbished-iPhone (Verkauf war 600 € brutto) als 14-Tage-Widerruf zurück. Aleks iPhone schreibt eine Gutschrift.",
+    meta:["Brutto: 600 €","netto: 600 ÷ 1,20 = 500 €","USt: 100 €"],
+    g:600, s:["4400","3500"], h:["2000"],
+    sa:{"4400":500,"3500":100}, ha:{"2000":600},
+    e:"Klassische Kundenrücksendung. 14-Tage-Widerruf ist gesetzlich (Konsumentenschutzgesetz). Buchhalterisch behandelt wie jede andere Retoure.",
+    es:"<b>Konsumentenschutz-Retour ≠ Mängelretour:</b> Buchhalterisch egal. Der Grund ist nur für die Statistik relevant.",
+    pr:"Amazon hat das 30-Tage-Widerrufsrecht erfunden — mehr als gesetzlich vorgeschrieben. Damit Branche-Standard geworden. Kostet Marge, gewinnt Vertrauen."
+  },
+
+  // ════════════════════════════════════════════════════════
+  // SPESEN (NEU)
+  // ════════════════════════════════════════════════════════
+  {id:'c033',firma:'iphone',topic:'spesen',difficulty:'l',
+    t:"Aleks iPhone zahlt die <b>quartalsweise Kontoführungsgebühr</b> der Bank Austria: 45 € (steuerfrei nach § 6 Abs. 1 Z 8 UStG für Bankleistungen). <b>Direkt vom Bankkonto abgebucht</b>.",
+    meta:["45 € (steuerfrei)","keine USt","Bank: 45 €"],
+    g:45, s:["7790"], h:["2800"],
+    sa:{"7790":45}, ha:{"2800":45},
+    e:"Bankspesen: Konto 7790 Spesen des Geldverkehrs. <b>Bankleistungen sind USt-frei</b> (§ 6 UStG)! Daher keine Vorsteuer-Buchung.",
+    es:"<b>Eselsbrücke Banken & USt:</b> Banken sind \"echte Steuerbefreite\" – sie verrechnen keine USt, du holst dir auch keine zurück. Gleiches gilt für Versicherungen!",
+    pr:"Banken zahlen stattdessen Stabilitätsabgabe und Versicherungssteuer. Daher kommen Bankspesen oft als \"unerwartet teuer\" daher – kein Vorsteuer-Trost."
+  },
+  {id:'c034',firma:'iphone',topic:'spesen',difficulty:'m',
+    t:"Aleks iPhone führt eine <b>SEPA-Auslandsüberweisung in die USA</b> durch. Die Bank verrechnet zusätzlich zur Überweisung <b>23 € sonstige Bankspesen</b> (steuerfrei). Direkt vom Bankkonto.",
+    meta:["23 € (steuerfrei)","keine USt","Bank: 23 €"],
+    g:23, s:["7791"], h:["2800"],
+    sa:{"7791":23}, ha:{"2800":23},
+    e:"Sonstige Bankspesen (Auslandsüberweisungen, SWIFT-Gebühren) → 7791. Im Schulkontenrahmen unterschieden von 7790 für gewöhnliche Spesen.",
+    es:"<b>7790 vs. 7791:</b> 7790 = klassische Geldverkehrsspesen (Kontoführung). 7791 = sonstige Bankspesen (Sonderfälle, Auslandsüberweisungen, Manipulationsgebühren).",
+    pr:"Internationale Überweisungen kosten oft 15–50 €. Daher ist Revolut/Wise (SEPA Instant) so beliebt – Aleks iPhone würde damit Tausende Euro im Jahr sparen."
+  },
+  {id:'c035',firma:'sneakers',topic:'spesen',difficulty:'m',
+    t:"<b>Mahnung an säumigen Kunden — Verkäufer-Sicht:</b> Aleks-Sneakers verlangt von einem säumigen Kunden <b>Mahnspesen in Höhe von 15 €</b> (1. Mahnung) plus <b>Verzugszinsen 8 €</b>. Beträge erhöhen die offene Lieferforderung des Kunden. KEINE USt auf Mahnspesen/Verzugszinsen.",
+    meta:["Mahnspesen: 15 € (Ertrag 4890)","Verzugszinsen: 8 € (Ertrag 8130)","Gesamt: 23 € mehr Forderung","KEINE USt!"],
+    g:23, s:["2000"], h:["4890","8130"],
+    sa:{"2000":23}, ha:{"4890":15,"8130":8},
+    e:"<b>Verkäufer-Sicht:</b> Lieferforderung (2000) erhöht sich um die zusätzlichen Beträge. Mahnspesen → <b>4890 Mahnspesenvergütungen</b> (Ertrag, NICHT 8301!). Verzugszinsen → <b>8130 Verzugszinsenerträge</b>.",
+    es:"<b>Mahnspesen sind ZWEI Konten — je nach Perspektive:</b><br>📤 Wir verlangen sie (Verkäufer-Sicht) → <b>4890</b> Mahnspesenvergütungen (Ertrag)<br>📥 Wir zahlen sie (Käufer-Sicht) → <b>8301</b> Mahnspesen (Aufwand)<br><br>Gleiche Logik bei Verzugszinsen: 8130 (Ertrag) vs. 8300 (Aufwand).",
+    pr:"Mahnspesen gemäß ZinsenG: Maximalbetrag 40 € für die erste Mahnung. Manche Firmen leben fast vom Mahnwesen – Inkassobüros kalkulieren das ein."
+  },
+  {id:'c036',firma:'iphone',topic:'spesen',difficulty:'l',
+    t:"Aleks iPhone zahlt die <b>Telefon- und Internetgebühren</b> für das Büro per Bank an A1 Telekom Austria. Rechnung: 95 € netto + 20% USt.",
+    meta:["95 € netto","+ 20% USt = 19 €","Bank: 114 €"],
+    g:114, s:["7381","2500"], h:["2800"],
+    sa:{"7381":95,"2500":19}, ha:{"2800":114},
+    e:"Telefongebühren → 7381 (im Schulkontenrahmen \"Telefongebühren\"). Mit 20% USt + Vorsteuer-Abzug.",
+    es:"<b>Spesen-Kontonummern Klasse 7:</b> 7381 Telefon, 7390 Porto, 7700 Versicherung, 7750 Rechtsberatung, 7755 Steuerberatung, 7770 Fortbildung.",
+    pr:"Telefon ist klassischer Vorsteuer-Abzugsposten. Beim Handy gibt's einen wichtigen Sonderfall: Privatanteil 25%-50% muss als Eigenverbrauch korrigiert werden (im 3. Jg HAK!)."
+  },
+  {id:'c037',firma:'savoy',topic:'spesen',difficulty:'m',
+    t:"Le Savon zahlt die <b>jährliche Betriebshaftpflicht-Versicherung</b> bei der Wiener Städtischen. Prämie: 480 € (steuerfrei nach § 6 UStG für Versicherungsleistungen). <b>Per Bank gezahlt</b>.",
+    meta:["480 € (steuerfrei)","keine USt","Bank: 480 €"],
+    g:480, s:["7700"], h:["2800"],
+    sa:{"7700":480}, ha:{"2800":480},
+    e:"Versicherungen sind <b>USt-frei</b> wie Bankleistungen → keine Vorsteuer. Konto 7700 Versicherungsaufwand.",
+    es:"<b>Echte USt-Befreite Branchen:</b> Banken, Versicherungen, Ärzte, Heilpraktiker. Alle: Kein USt auf der Rechnung, kein Vorsteuer-Abzug für uns.",
+    pr:"Versicherungen zahlen statt USt eine spezielle Versicherungssteuer (4–11%). Die ist in der Prämie schon drin – wir buchen einfach den Gesamtbetrag."
+  },
+  {id:'c038',firma:'iphone',topic:'spesen',difficulty:'l',
+    t:"Aleks iPhone bezahlt eine <b>Rechtsberatung</b> bei einem Anwalt für die Vertragsgestaltung eines neuen Apple-Liefervertrags. Rechnung: 1.200 € netto + 20% USt, <b>per Bank gezahlt</b>.",
+    meta:["1.200 € netto","+ 20% USt = 240 €","Bank: 1.440 €"],
+    g:1440, s:["7750","2500"], h:["2800"],
+    sa:{"7750":1200,"2500":240}, ha:{"2800":1440},
+    e:"Rechtsberatung → 7750. Anwälte verrechnen 20% USt → Vorsteuer-Abzug möglich.",
+    es:"<b>Beratungs-Konten:</b> 7750 Rechtsberatung (Anwalt), 7755 Steuerberatung (Steuerberater), 7770 Fortbildung (Seminare). Alle mit 20% USt + Vorsteuer-Abzug.",
+    pr:"Rechtsberatung steuerlich voll absetzbar (außer privat veranlasst). Bei einer Firmengründung können das gut 5.000–15.000 € sein."
+  },
+  {id:'c039',firma:'sneakers',topic:'spesen',difficulty:'m',
+    t:"Aleks-Sneakers zahlt einem <b>Handelsvertreter eine Verkaufsprovision</b> in Höhe von 450 € netto + 20% USt für vermittelte Bestellungen im Quartal. <b>Per Bank gezahlt</b>.",
+    meta:["450 € netto","+ 20% USt = 90 €","Bank: 540 €"],
+    g:540, s:["7540","2500"], h:["2800"],
+    sa:{"7540":450,"2500":90}, ha:{"2800":540},
+    e:"Provision an Dritte (nicht Arbeitnehmer) → 7540 Provisionen an Dritte. Mit USt + Vorsteuer.",
+    es:"<b>Wichtige Unterscheidung:</b> Provision an HANDELSVERTRETER (selbständig) → 7540 mit USt. Provision an ANGESTELLTEN MITARBEITER → 6000er-Konten (kein USt, dafür SV/LSt).",
+    pr:"Handelsvertreter sind in Österreich nach HVertrG geschützt – sie bekommen sogar Provision auf Folgeaufträge ihrer Kunden, auch wenn sie nicht mehr beauftragt sind."
+  },
+  {id:'c040',firma:'iphone',topic:'spesen',difficulty:'l',
+    t:"Aleks iPhone <b>überweist die Portogebühren</b> für eine Briefsendung an die Österreichische Post: 12 € netto + 20% USt. <b>Per Bank gezahlt</b>.",
+    meta:["12 € netto","+ 20% USt = 2,40 €","Bank: 14,40 €"],
+    g:14.40, s:["7390","2500"], h:["2800"],
+    sa:{"7390":12,"2500":2.40}, ha:{"2800":14.40},
+    e:"Portogebühren → 7390. Mit 20% USt + Vorsteuer-Abzug.",
+    es:"<b>Versand-Aufwand vs. Porto:</b> 7300/7310 = Frachten/Paketgebühren (für Warenversand). 7390 = Porto (für Briefe, Standardpost).",
+    pr:"Klein, aber bei vielen Briefen läppert sich das. Manche Firmen wechseln auf Hybridpost (E-Mail → Post druckt+sendet) oder rein digitalen Versand → Einsparung 60–80%."
+  },
+
+  // ────── Bankabschluss (Quartalsabschluss) ──────
+  {id:'c068',firma:'iphone',topic:'spesen',difficulty:'l',
+    t:"<b>Bankabschluss Q4 – Habenzinsen:</b> Beim Quartalsabschluss schreibt die HYPO Aleks iPhone <b>Habenzinsen in Höhe von 30 €</b> auf dem Girokonto gut. Die Zinsen erhöhen das Bankguthaben. (KESt-Buchung erfolgt separat.)",
+    meta:["Habenzinsen: 30 €","Bank erhöht sich","Keine USt (Zinsen sind steuerfrei)"],
+    g:30, s:["2800"], h:["8050"],
+    sa:{"2800":30}, ha:{"8050":30},
+    e:"<b>Habenzinsen</b> = Zinsen, die WIR von der Bank bekommen (positiv für uns). Bank (2800) erhöht sich → Soll. Zinsertrag (8050) ist ein Finanzergebnis → Haben.",
+    es:"<b>Eselsbrücke Haben/Soll bei Zinsen:</b> \"Haben\"zinsen = wir haben sie verdient → ERTRAG. \"Soll\"zinsen = wir sollen sie zahlen → AUFWAND. Klingt verwirrend, aber die Begriffe kommen aus Bank-Sicht: SOLL-Saldo = wir schulden der Bank, HABEN-Saldo = die Bank schuldet uns.",
+    pr:"Bei den heutigen Zinsen (3–4% auf Geschäftskonten 2026) ist das bei Aleks iPhone-Größenordnungen noch eine relevante Einkommensquelle. EZB-Leitzins macht's möglich – noch vor 3 Jahren waren Habenzinsen praktisch tot."
+  },
+  {id:'c069',firma:'iphone',topic:'spesen',difficulty:'l',
+    t:"<b>Bankabschluss Q4 – Sollzinsen:</b> Die HYPO belastet Aleks iPhone <b>Sollzinsen in Höhe von 14 €</b> wegen einer kurzfristigen Kontoüberziehung im Quartal. Bankabbuchung.",
+    meta:["Sollzinsen: 14 €","Bank verringert sich","Keine USt (Zinsen sind steuerfrei)"],
+    g:14, s:["8310"], h:["2800"],
+    sa:{"8310":14}, ha:{"2800":14},
+    e:"<b>Sollzinsen</b> = Zinsen, die WIR der Bank zahlen müssen (negativ für uns). Konto 8310 Zinsaufwand Girokonto im Soll, Bank (2800) im Haben.",
+    es:"<b>8280 vs. 8310:</b> 8280 = Zinsen für AUSGEHANDELTE Bankkredite (z.B. Investitionskredit). 8310 = Zinsen wegen Kontoüberziehung (kurzfristig, ohne Kreditvertrag). In Aleks' Schule oft als 8310 \"Zinsenaufwand Girokonto\" geführt.",
+    pr:"Überziehungszinsen sind heute oft 12–15% p.a. – brutal teuer! Daher ist es besser, einen offiziellen Kontokorrent-Rahmen mit der Bank zu vereinbaren (8% p.a.) als ständig zu überziehen."
+  },
+  {id:'c070',firma:'iphone',topic:'spesen',difficulty:'m',
+    t:"<b>KESt auf Habenzinsen:</b> Die HYPO behält von den 30 € Habenzinsen automatisch <b>7,50 € KESt (25%)</b> ein und führt sie ans Finanzamt ab. Das ist eine <b>Endbesteuerung</b> – die Bank zieht die Steuer direkt vom Konto ab.",
+    meta:["KESt: 30 € × 25% = 7,50 €","Bank verringert sich","Reduziert den Zinsertrag"],
+    g:7.50, s:["8050"], h:["2800"],
+    sa:{"8050":7.50}, ha:{"2800":7.50},
+    e:"<b>KESt-Methode (Schul-Variante):</b> Die KESt wird direkt vom Zinsertrag-Konto (8050) abgezogen. Soll: 8050 (Reduktion des Ertrags). Haben: 2800 (Bank reduziert sich).",
+    es:"<b>KESt = Kapitalertragsteuer:</b> 25% auf Zinserträge in Österreich. \"Endbesteuert\" bedeutet: damit ist die Steuer auf diese Zinsen für IMMER erledigt — du musst sie nicht mehr in der Einkommensteuer angeben.",
+    pr:"In Österreich wird KESt direkt von der Bank abgeführt — du siehst nur den Netto-Zinsertrag. Bei Aktien-Dividenden, Anleihezinsen, Sparbuch-Zinsen: immer 25% (bei Aktien 27,5%). Bei Bitcoin-Gewinnen seit 2022 auch! Sehr wichtig für jeden Anleger zu kennen."
+  },
+  {id:'c071',firma:'iphone',topic:'spesen',difficulty:'l',
+    t:"<b>Quartals-Kontoführungsgebühr:</b> Die HYPO verrechnet <b>15 € Kontoführungsgebühr</b> für das Quartal (steuerfrei nach § 6 UStG). Bankabbuchung.",
+    meta:["15 € (steuerfrei)","Bank verringert sich"],
+    g:15, s:["7790"], h:["2800"],
+    sa:{"7790":15}, ha:{"2800":15},
+    e:"Kontoführungsgebühr → 7790 Spesen des Geldverkehrs. Bankleistungen sind USt-frei → keine Vorsteuer-Buchung.",
+    es:"<b>Bankspesen-Konto:</b> 7790 Spesen des Geldverkehrs (Kontoführung, Überweisungsgebühren), 7791 sonstige Bankspesen (Auslandsüberweisungen, SWIFT).",
+    pr:"Quartals-Kontoführungsgebühren sind im Schulkontenrahmen ein klassisches Übungsbeispiel. In der Realität verrechnen Banken oft auch monatlich – manche kostenlos (Online-Banken wie N26), manche teuer (klassische Filialbanken)."
+  },
+  {id:'c072',firma:'iphone',topic:'spesen',difficulty:'s',
+    t:"<b>Kompletter Bankabschluss Q4 OHNE KESt (Sammelbuchung):</b> Auf einem Bankauszug zum 31.12. stehen drei Quartalsabschluss-Positionen: <b>Sollzinsen 14 € (Aufwand) + Habenzinsen 30 € (Ertrag) + Kontoführungsgebühr 15 € (Spesen)</b>. KESt wird separat in einer eigenen Buchung erfasst. Sammelbuchung in einer Zeile.",
+    meta:["+ 30 € Habenzinsen","− 14 € Sollzinsen","− 15 € Kontoführungsgebühr","= Saldo: + 1 € auf Bank"],
+    g:30, s:["8310","7790","2800"], h:["8050"],
+    sa:{"8310":14,"7790":15,"2800":1}, ha:{"8050":30},
+    e:"<b>Sammelbuchung Bankabschluss:</b> Im Soll: Sollzinsen (8310), Kontoführungsgebühr (7790), Bank-Saldo (2800 für die Netto-Gutschrift). Im Haben: Habenzinsen (8050). Saldo: 30 − 14 − 15 = +1 € auf Bank.",
+    es:"<b>Sammelbuchung-Trick:</b> Wenn die Summe der Erträge die Summe der Aufwände übersteigt → Bank steht im SOLL (Bank erhöht sich). Wenn umgekehrt → Bank steht im HABEN.",
+    pr:"In modernen Buchhaltungssoftware wird meist jede Position als eigene Zeile erfasst. Die Sammelbuchung ist eine schulische Übung, um zu zeigen dass die Bilanz auch bei komplexen Mehrfach-Buchungen ausgeglichen bleiben muss."
+  },
+  {id:'c073',firma:'iphone',topic:'spesen',difficulty:'m',
+    t:"<b>Zahlungsverzug — Käufer-Sicht:</b> Aleks iPhone hat eine Lieferantenrechnung über 5.000 € erst nach dem Zahlungsziel beglichen. Der Lieferant verrechnet uns nachträglich <b>25 € Verzugszinsen</b>. Diese erhöhen die Verbindlichkeit. KEINE USt auf Verzugszinsen.",
+    meta:["Verzugszinsen: 25 €","Verbindlichkeit erhöht sich","KEINE USt!"],
+    g:25, s:["8300"], h:["3300"],
+    sa:{"8300":25}, ha:{"3300":25},
+    e:"<b>Käufer-Sicht:</b> Verzugszinsen-AUFWAND auf Konto <b>8300</b> (NICHT 8130 — das wäre der Ertrag beim Verkäufer!). Lieferverbindlichkeit (3300) erhöht sich um den Verzugszinsen-Betrag.",
+    es:"<b>Verzugszinsen — zwei Konten je nach Perspektive:</b><br>📤 Wir BEKOMMEN sie (Verkäufer-Sicht) → <b>8130</b> Verzugszinsenerträge (Klasse 8 Erträge)<br>📥 Wir ZAHLEN sie (Käufer-Sicht) → <b>8300</b> Verzugszinsenaufwand (Klasse 8 Aufwände)<br><br>Beide in Klasse 8 (Finanzergebnis), aber unterschiedliche Vorzeichen.",
+    pr:"Verzugszinsen-Höhe nach österr. UGB: Basiszinssatz + 9,2% bei B2B-Geschäften. Bei 4% Basiszinssatz also rund 13% p.a. — extrem teuer und besser zu vermeiden."
+  },
+  {id:'c074',firma:'sneakers',topic:'spesen',difficulty:'l',
+    t:"<b>Mahnung erhalten — Käufer-Sicht:</b> Aleks-Sneakers hat eine Rechnung übersehen. Der Lieferant schickt eine 2. Mahnung und verrechnet <b>20 € Mahnspesen</b>. Die Verbindlichkeit erhöht sich. KEINE USt.",
+    meta:["Mahnspesen: 20 €","Verbindlichkeit erhöht sich","KEINE USt!"],
+    g:20, s:["8301"], h:["3300"],
+    sa:{"8301":20}, ha:{"3300":20},
+    e:"<b>Käufer-Sicht:</b> Mahnspesen-AUFWAND auf Konto <b>8301</b>. Verbindlichkeit (3300) erhöht sich.",
+    es:"<b>Mahnspesen — Spiegelbild:</b> 8301 (Aufwand beim Käufer) ↔ 4890 (Ertrag beim Verkäufer). Logik: Was bei einem Aufwand ist, ist beim anderen Ertrag — die Beträge gleichen sich gesamtwirtschaftlich aus.",
+    pr:"Mahnstufen in Österreich: 1. Mahnung meist kostenlos (Höflichkeitsmahnung), 2. Mahnung mit Mahnspesen, 3. Mahnung mit Anwaltsandrohung. Nach der 3. übergeben viele Firmen an ein Inkassobüro."
+  },
+
+  // ════════════════════════════════════════════════════════
+  // AUSLANDSGESCHÄFTE & FX
+  // ════════════════════════════════════════════════════════
+  {id:'c041',firma:'iphone',topic:'fx',difficulty:'s',
+    t:"<b>Innergemeinschaftlicher Erwerb:</b> Aleks iPhone kauft 100 Stück iPhone 15 Pro beim deutschen Großhändler ApplePartner München. Rechnung: 100 × 950 € = <b>95.000 € netto, Verkauf auf Ziel</b>. Der deutsche Lieferant stellt nach Reverse-Charge OHNE deutsche USt aus. Erwerbsteuer (20%) wird in AT selbst berechnet, Saldo Null.",
+    meta:["Rechnung: 95.000 €","Erwerbsteuer 20%: 19.000 €","Selbst-berechnung (Soll & Haben)","Saldo USt-neutral"],
+    g:95000, s:["5010","2510"], h:["3300","3510"],
+    sa:{"5010":95000,"2510":19000}, ha:{"3300":95000,"3510":19000},
+    e:"<b>ig. Erwerb aus EU:</b> Erwerbsteuer (2510 im Soll) und Erwerbsteuer-Schuld (3510 im Haben) heben sich auf. Bruttobetrag nur 95.000 €.",
+    es:"<b>Reverse Charge:</b> Wir berechnen uns die USt SELBST. Forderung (Soll) UND Verbindlichkeit (Haben) ans Finanzamt – Saldo NULL.",
+    pr:"Reverse Charge wurde EU-weit gegen MwSt-Betrug eingeführt. Vor 1993 lief Mehrwertsteuer-Rückerstattung anders – Wochen Bearbeitung, viel Betrug."
+  },
+  {id:'c042',firma:'iphone',topic:'fx',difficulty:'m',
+    t:"<b>Innergemeinschaftliche Lieferung:</b> Aleks iPhone verkauft 50 Stück iPhone 15 an MobileWelt Berlin. Stückpreis: 850 € netto, <b>Verkauf auf Rechnung</b>. UID geprüft → <b>steuerfrei nach Art. 7 UStG</b>.",
+    meta:["50 × 850 € = 42.500 €","STEUERFREI (UID geprüft)","KEINE 20% USt!"],
+    g:42500, s:["2000"], h:["4010"],
+    sa:{"2000":42500}, ha:{"4010":42500},
+    e:"<b>ig. Lieferung in EU:</b> STEUERFREI. Konto 4010, KEINE USt. Voraussetzung: UID-Nummer geprüft.",
+    es:"<b>UID-Pflicht:</b> Ohne geprüfte UID-Nummer → 20% nachzahlen. Prüfung auf FinanzOnline (VIES-Abfrage).",
+    pr:"Bei Betriebsprüfungen häufige Feststellung: \"UID war ungültig → 20% nachzahlen.\" Oft 5-stellige Nachforderungen."
+  },
+  {id:'c043',firma:'iphone',topic:'fx',difficulty:'m',
+    t:"<b>Import aus USA (Drittland):</b> Aleks iPhone importiert 200 iPhone 15 Pro Max bei Apple Inc. Kalifornien. Rechnung: <b>USD 240.000, Kauf auf Ziel</b>. Wechselkurs am Rechnungstag: <b>1 EUR = 1,08 USD</b>. Hier ist nur die <b>Wareneinbuchung</b> gefragt — EUSt und Zahlung folgen separat.",
+    meta:["240.000 USD ÷ 1,08 = 222.222,22 €","Drittland → KEINE USt auf Rechnung","EUSt kommt separat beim Zoll!"],
+    g:222222.22, s:["5010"], h:["3300"],
+    sa:{"5010":222222.22}, ha:{"3300":222222.22},
+    e:"<b>Import aus Drittland:</b> Rechnung OHNE USt. Umrechnung: 240.000 USD ÷ 1,08 = 222.222,22 €.",
+    es:"<b>USD-Umrechnung:</b> FW ÷ Kurs = EUR. \"Kurs ist die Brücke.\" 240.000 USD ÷ 1,08 = 222.222 EUR.",
+    pr:"FW-Risiko offen bis Zahlung. Apple selbst sichert >50% Umsätze in FW mit Hedging ab."
+  },
+  {id:'c044',firma:'iphone',topic:'fx',difficulty:'m',
+    t:"<b>Verzollung am Flughafen Wien:</b> Aleks iPhone zahlt <b>per Banküberweisung</b> die Einfuhrumsatzsteuer (EUSt) ans Zollamt. Bemessungsgrundlage: 222.222,22 € Warenwert + 5.000 € Zoll = <b>227.222,22 €</b>. EUSt 20% = 45.444,44 €.",
+    meta:["Bemessung: 227.222,22 €","EUSt 20%: 45.444,44 €","Bank: 45.444,44 €"],
+    g:45444.44, s:["2520"], h:["2800"],
+    sa:{"2520":45444.44}, ha:{"2800":45444.44},
+    e:"EUSt auf 2520 'Entrichtete Einfuhrumsatzsteuer' – wie Vorsteuer, holst du dir zurück.",
+    es:"<b>EUSt vs. Zoll:</b> Zoll = bleibt (Aufwand!). EUSt = Durchlaufposten (holst zurück). 2520 EUSt ist FORDERUNG (Klasse 2), Zoll wäre AUFWAND (Klasse 7).",
+    pr:"Bemessung der EUSt = Warenwert + Zoll + Frachtkosten + Versicherung (CIF-Wert). Falsche Deklaration → Nachforderungen 3 Jahre möglich."
+  },
+  {id:'c045',firma:'iphone',topic:'fx',difficulty:'s',
+    t:"<b>Bezahlung USA-Rechnung mit Kursverlust:</b> Aleks iPhone überweist <b>per Bank</b> 240.000 USD an Apple. Die Verbindlichkeit war mit Kurs 1,08 zu 222.222,22 € eingebucht. Beim Zahlungstag ist der Kurs <b>1 EUR = 1,05 USD</b> (Dollar STÄRKER) – wir brauchen mehr Euro für dieselben Dollar.",
+    meta:["Verb. alt: 222.222,22 €","Zahlung neu: 240.000 ÷ 1,05 = 228.571,43 €","Differenz: 6.349,21 € MEHR → Kursverlust"],
+    g:222222.22, s:["3300","7819"], h:["2800"],
+    sa:{"3300":222222.22,"7819":6349.21}, ha:{"2800":228571.43},
+    e:"<b>FW-Kursverlust!</b> Dollar wurde teurer (1,08 → 1,05). Verbindlichkeit mit altem Wert ausgebucht, Differenz auf 7819.",
+    es:"<b>Kurs sinkt = FW stärker:</b> Bei Import → höhere EUR-Kosten = Kursverlust. \"Kurs runter, Fremdwährung rauf.\"",
+    pr:"Sommer 2022: EUR/USD unter Parität (erstmals seit 20 Jahren). iPhones in EU wurden um 200 € teurer."
+  },
+  {id:'c046',firma:'iphone',topic:'fx',difficulty:'m',
+    t:"<b>Export nach UK (Drittland nach Brexit):</b> Aleks iPhone verkauft 100 iPhone 15 nach Großbritannien an Mobile UK Ltd. London. Rechnung: <b>GBP 75.000, Verkauf auf Ziel</b>. Kurs: <b>1 EUR = 0,85 GBP</b>. <b>Steuerfrei mit Ausfuhrnachweis</b>.",
+    meta:["75.000 GBP ÷ 0,85 = 88.235,29 €","Drittland → STEUERFREI","Ausfuhrnachweis vom Zoll erforderlich"],
+    g:88235.29, s:["2000"], h:["4015"],
+    sa:{"2000":88235.29}, ha:{"4015":88235.29},
+    e:"<b>Drittland-Export:</b> STEUERFREI nach § 7 UStG. Konto 4015. Nachweis: Ausfuhrnachweis vom Zoll (statt UID wie bei EU).",
+    es:"<b>4010 vs. 4015:</b> 4010 = ig. Lieferung EU. 4015 = Drittland-Export. \"10 für die zehn EU-Nachbarn, 15 für die fünfzehn weiten Welt-Länder.\"",
+    pr:"Brexit 2021: UK über Nacht zu Drittland geworden. Viele KMUs gaben UK-Markt auf – Verwaltung teurer als Umsatz."
+  },
+  {id:'c047',firma:'iphone',topic:'fx',difficulty:'s',
+    t:"<b>Zahlungseingang UK mit Kursgewinn:</b> Mobile UK Ltd. überweist <b>per Bank 75.000 GBP</b>. Forderung war mit Kurs 0,85 zu 88.235,29 € eingebucht. Beim Eingang ist Kurs <b>1 EUR = 0,82 GBP</b> (Pfund STÄRKER) – wir bekommen mehr Euro.",
+    meta:["Forderung alt: 88.235,29 €","Eingang neu: 75.000 ÷ 0,82 = 91.463,41 €","Differenz: 3.228,12 € MEHR → Kursgewinn"],
+    g:88235.29, s:["2800"], h:["2000","4840"],
+    sa:{"2800":91463.41}, ha:{"2000":88235.29,"4840":3228.12},
+    e:"<b>FW-Kursgewinn!</b> Pfund stärker (0,85 → 0,82). Differenz auf 4840 FW-Kursgewinne.",
+    es:"<b>Export-Logik:</b> Forderung in FW + FW stärker = Gewinn. \"Beim Export wünscht du dir starke FW.\"",
+    pr:"Schweizer Uhrenhersteller leiden bei starkem Franken. Tesla litt 2021 bei starkem USD – Europa-Verkäufe wurden teurer."
+  },
+  {id:'c048',firma:'iphone',topic:'fx',difficulty:'m',
+    t:"<b>Import aus Japan (Drittland):</b> Aleks iPhone importiert 1.500 PlayStation 5 Konsolen bei Sony Tokyo. Rechnung: <b>JPY 4.500.000, Kauf auf Ziel</b>. Kurs: <b>1 EUR = 160 JPY</b>. Hier ist nur die <b>Wareneinbuchung</b> gefragt – EUSt und Zahlung folgen separat.",
+    meta:["4.500.000 JPY ÷ 160 = 28.125 €","Drittland → KEINE USt auf Rechnung","EUSt kommt separat beim Zoll!"],
+    g:28125, s:["5010"], h:["3300"],
+    sa:{"5010":28125}, ha:{"3300":28125},
+    e:"<b>Japan-Import:</b> 4.500.000 ÷ 160 = 28.125 €. Wie USA: keine ausländische USt, EUSt beim Zoll.",
+    es:"<b>JPY-Umrechnung:</b> Yen ist Kleingeld-Währung. 1 Yen ≈ 0,6 Cent. Kurs entsprechend hoch (160 JPY/EUR).",
+    pr:"Yen-Schwäche 2022–2024: Kurs von 130 auf 170 JPY/EUR. Japanische Importeure → automatische Kursgewinne. Toyota & Sony: Rekordgewinne in Yen."
+  },
+  {id:'c049',firma:'iphone',topic:'fx',difficulty:'s',
+    t:"<b>Bezahlung Sony-Rechnung mit Kursgewinn:</b> Aleks iPhone überweist <b>per Bank</b> 4.500.000 JPY. Verbindlichkeit war mit Kurs 160 zu 28.125 € eingebucht. Beim Zahlungstag ist Kurs <b>1 EUR = 165 JPY</b> (Yen SCHWÄCHER) – wir brauchen weniger Euro.",
+    meta:["Verb. alt: 28.125 €","Zahlung neu: 4.500.000 ÷ 165 = 27.272,73 €","Differenz: 852,27 € WENIGER → Kursgewinn"],
+    g:28125, s:["3300"], h:["2800","4840"],
+    sa:{"3300":28125}, ha:{"2800":27272.73,"4840":852.27},
+    e:"<b>FW-Kursgewinn beim Import!</b> Yen schwächer (160 → 165). Differenz auf 4840.",
+    es:"<b>Import-Logik:</b> Verbindlichkeit in FW + FW schwächer = Gewinn. Komplette Regel: \"Forderung + FW stärker = Gewinn. Verbindlichkeit + FW schwächer = Gewinn.\"",
+    pr:"VW verdient oft mehr in Asien als Europa: CNY-Verbindlichkeiten der Tochter werden in EUR konsolidiert. Schwächt CNY → schrumpfen EUR-Schulden automatisch."
+  },
+  {id:'c050',firma:'iphone',topic:'fx',difficulty:'m',
+    t:"<b>Export Schweiz (Drittland):</b> Aleks iPhone verkauft 30 iPad Pros an Tech Suisse Zürich. Rechnung: <b>CHF 24.000, Verkauf auf Ziel</b>. Kurs: <b>1 EUR = 0,96 CHF</b>. <b>Steuerfrei mit Ausfuhrnachweis</b>.",
+    meta:["24.000 CHF ÷ 0,96 = 25.000 €","Schweiz = Drittland → STEUERFREI","Konto 4015"],
+    g:25000, s:["2000"], h:["4015"],
+    sa:{"2000":25000}, ha:{"4015":25000},
+    e:"Schweiz-Export: Drittland → 4015. CHF 24.000 ÷ 0,96 = 25.000 €.",
+    es:"<b>CHF nahe 1:1:</b> Kurs unter 1,00 = CHF stärker als EUR. Faustregel: \"Kurs unter eins, FW stärker.\"",
+    pr:"Schweiz = AT's zweitgrößter Exportpartner. Starker Franken = Schweizer kaufen mehr in EU. Tourismus reagiert sofort: starke CHF → mehr Schweizer Skiurlauber in AT."
+  },
+  {id:'c051',firma:'iphone',topic:'fx',difficulty:'s',
+    t:"<b>Zahlungseingang Schweiz mit Kursverlust:</b> Tech Suisse überweist <b>per Bank 24.000 CHF</b>. Forderung war mit Kurs 0,96 zu 25.000 € eingebucht. Beim Eingang ist Kurs <b>1 EUR = 0,99 CHF</b> (Franken SCHWÄCHER) – wir bekommen weniger Euro.",
+    meta:["Forderung alt: 25.000 €","Eingang neu: 24.000 ÷ 0,99 = 24.242,42 €","Differenz: 757,58 € WENIGER → Kursverlust"],
+    g:25000, s:["2800","7819"], h:["2000"],
+    sa:{"2800":24242.42,"7819":757.58}, ha:{"2000":25000},
+    e:"<b>FW-Kursverlust beim Export!</b> Franken schwächer (0,96 → 0,99). FW-Kursverluste auf 7819.",
+    es:"<b>Komplette FX-Matrix:</b><br>📥 Import + FW stärker → 7819 Verlust<br>📥 Import + FW schwächer → 4840 Gewinn<br>📤 Export + FW stärker → 4840 Gewinn<br>📤 Export + FW schwächer → 7819 Verlust",
+    pr:"Konzerne sichern das mit Devisentermingeschäften ab. Mercedes verkauft nach China → kauft CNY-Verkaufsoption. Standard im Treasury."
+  },
+  {id:'c052',firma:'iphone',topic:'fx',difficulty:'m',
+    t:"<b>Import aus China:</b> Aleks iPhone kauft 5.000 USB-C Kabel bei einem Hersteller in Shenzhen. Rechnung: <b>USD 15.000, Kauf auf Ziel</b>. Kurs am Rechnungstag: <b>1 EUR = 1,10 USD</b>. China = Drittland.",
+    meta:["15.000 USD ÷ 1,10 = 13.636,36 €","Drittland → ohne USt","EUSt kommt separat"],
+    g:13636.36, s:["5010"], h:["3300"],
+    sa:{"5010":13636.36}, ha:{"3300":13636.36},
+    e:"<b>China-Import:</b> Wie USA/Japan. Drittland, ohne USt auf der Rechnung. EUSt + Zoll später separat.",
+    es:"<b>China rechnet meist in USD, manchmal CNY:</b> Bei großen Bestellungen lohnt Verhandlung über Währung. USD ist Standard, CNY oft günstiger für den Lieferanten (kein FX-Risiko für ihn).",
+    pr:"China-Beschaffung ist Standard für Elektronik-Händler. Apple lässt 90% in China produzieren. Aleks iPhone agiert hier ähnlich, nur kleiner."
+  },
+  {id:'c053',firma:'sneakers',topic:'fx',difficulty:'m',
+    t:"<b>Sneaker-Export in die USA:</b> Aleks-Sneakers verkauft 100 Paar limited Edition Yeezys an SneakerCity NYC. Rechnung: <b>USD 25.000, Verkauf auf Ziel</b>. Kurs: <b>1 EUR = 1,08 USD</b>. Drittland-Export.",
+    meta:["25.000 USD ÷ 1,08 = 23.148,15 €","Drittland → STEUERFREI","Konto 4015"],
+    g:23148.15, s:["2000"], h:["4015"],
+    sa:{"2000":23148.15}, ha:{"4015":23148.15},
+    e:"<b>USA-Export:</b> Drittland → 4015 steuerfrei. Forderung in EUR-Gegenwert eingebucht.",
+    es:"<b>Sneaker-Resell-Markt USA:</b> Limited Editions können 3-5× Listenpreis bringen. Yeezys, Air Jordans, Travis Scott Kollabos → Geld.",
+    pr:"StockX und GOAT haben den globalen Sneaker-Resell-Markt erfunden. Geschätzt 6 Mrd USD jährlich – mehr als manche börsennotierte Mode-Marken."
+  },
+  {id:'c054',firma:'savoy',topic:'fx',difficulty:'l',
+    t:"<b>Le Savon verkauft Seifen an einen Bio-Laden in Bratislava:</b> 100 Stück à 8 € netto, <b>Verkauf auf Rechnung</b>. Slowakei = EU-Mitglied, UID geprüft → <b>ig. Lieferung steuerfrei</b>.",
+    meta:["100 × 8 € = 800 €","Slowakei = EU","STEUERFREI"],
+    g:800, s:["2000"], h:["4010"],
+    sa:{"2000":800}, ha:{"4010":800},
+    e:"<b>ig. Lieferung in die Slowakei:</b> Konto 4010, steuerfrei. KEINE 20% USt!",
+    es:"<b>EU-Mitglieder 2026:</b> Alle 27. Auch wenn's nahe Nachbarn sind (Slowakei, Tschechien, Ungarn) → trotzdem ig. Lieferung mit UID-Prüfung erforderlich.",
+    pr:"Bratislava liegt 60 km von Wien — perfekter Markt für Wiener Manufakturen. Die Slowakei hat höhere Mehrwertsteuer (20%), aber niedrigere Lohnkosten."
+  },
+  {id:'c055',firma:'iphone',topic:'fx',difficulty:'s',
+    t:"<b>Bezahlung China-Rechnung mit Kursgewinn:</b> Aleks iPhone überweist <b>per Bank</b> 15.000 USD an Shenzhen-Lieferanten. Verbindlichkeit war mit Kurs 1,10 zu 13.636,36 € eingebucht. Beim Zahlungstag: <b>1 EUR = 1,12 USD</b> (Dollar SCHWÄCHER) – wir brauchen weniger Euro.",
+    meta:["Verb. alt: 13.636,36 €","Zahlung neu: 15.000 ÷ 1,12 = 13.392,86 €","Differenz: 243,50 € WENIGER → Kursgewinn"],
+    g:13636.36, s:["3300"], h:["2800","4840"],
+    sa:{"3300":13636.36}, ha:{"2800":13392.86,"4840":243.50},
+    e:"<b>FW-Kursgewinn beim Import:</b> Dollar wurde schwächer (1,10 → 1,12). Wir zahlen weniger Euro.",
+    es:"<b>Spickzettel-Logik:</b> Kurs steigt = FW schwächer. Bei Import = wir profitieren. Bei Export = wir verlieren.",
+    pr:"Diese kleinen Kursdifferenzen summieren sich. Bei einem Importeur mit 5 Mio € USD-Umsatz: 1% Kursbewegung = 50.000 € Differenz!"
+  },
+
+  // ════════════════════════════════════════════════════════
+  // ANLAGEN & GWG (NEU)
+  // ════════════════════════════════════════════════════════
+  {id:'c056',firma:'iphone',topic:'anlagen',difficulty:'l',
+    t:"Aleks iPhone <b>kauft eine Digitalkamera um 700 € netto</b> bei Foto Köberl für die Produktfotos. Die Kamera wird einzeln genutzt. <b>Zahlung auf Rechnung</b>, 20% USt. <b>GWG-Sofortabschreibung</b>.",
+    meta:["700 € netto < 1.000 € → GWG","+ 20% USt = 140 €","Brutto: 840 €"],
+    g:840, s:["7030","2500"], h:["3300"],
+    sa:{"7030":700,"2500":140}, ha:{"3300":840},
+    e:"GWG = geringwertiges Wirtschaftsgut unter 1.000 € netto, einzeln nutzbar → <b>Sofortabschreibung auf 7030</b> beim Kauf. Keine Aktivierung in Klasse 0 nötig.",
+    es:"<b>GWG-Grenze 2026 in AT:</b> 1.000 € netto. Drunter = sofort als Aufwand (7030). Drüber = aktivieren und über Nutzungsdauer abschreiben (AfA).",
+    pr:"Die Grenze wurde 2024 von 800 € auf 1.000 € erhöht. Vor 2020 lag sie nur bei 400 € — alles drüber musste mühsam jahrelang abgeschrieben werden."
+  },
+  {id:'c057',firma:'savoy',topic:'anlagen',difficulty:'m',
+    t:"Le Savon kauft <b>eine Digitalkamera um 900 € + eine Speicherkarte um 200 €</b> bei MediaMarkt (gemeinsamer Einkauf, beides für die Produktfoto-Erstellung). <b>Zahlung auf Rechnung</b>, 20% USt. Achtung: bilden Kamera + Karte eine Einheit?",
+    meta:["Kamera 900 € + Karte 200 €","= Einheit 1.100 €","> 1.000 € → KEIN GWG","+ 20% USt = 220 €","Brutto: 1.320 €"],
+    g:1320, s:["0660","2500"], h:["3300"],
+    sa:{"0660":1100,"2500":220}, ha:{"3300":1320},
+    e:"Kamera + Speicherkarte = <b>nur gemeinsam nutzbar</b> → bilden eine Einheit (1.100 € netto). Über 1.000 € → KEIN GWG → aktivieren auf <b>0660 Betriebs- und Geschäftsausstattung</b>, dann über Nutzungsdauer abschreiben.",
+    es:"<b>Einheitsregel:</b> Kann eine Anlage nur GEMEINSAM mit anderen genutzt werden → eine Einheit. Beispiele: PC + Tastatur + Bildschirm = Einheit. Kamera + Speicherkarte = Einheit. Aber 6 gleiche Vorhänge = einzeln nutzbar, jeder ein GWG.",
+    pr:"Die Einheitsregel ist Stolperfalle Nr. 1 bei Anlagen-Buchung. Steuerprüfer schauen genau hin — wer Komponenten splittet, um unter die GWG-Grenze zu kommen, riskiert Nachversteuerung."
+  },
+  {id:'c058',firma:'sneakers',topic:'anlagen',difficulty:'m',
+    t:"Aleks-Sneakers kauft <b>6 gleiche Bürostühle à 180 € netto</b> bei Ikea Wien für den Showroom. <b>Zahlung auf Rechnung</b>, 20% USt. Jeder Stuhl ist <b>einzeln nutzbar</b>.",
+    meta:["6 × 180 € = 1.080 € netto gesamt","Pro Stk: 180 € < 1.000 €","Einzeln nutzbar → 6× GWG","+ 20% USt = 216 €","Brutto: 1.296 €"],
+    g:1296, s:["7030","2500"], h:["3300"],
+    sa:{"7030":1080,"2500":216}, ha:{"3300":1296},
+    e:"Jeder Stuhl ist einzeln nutzbar → jeder einzelne ist ein GWG (180 € < 1.000 €). Auch wenn die Gesamtsumme 1.080 € beträgt — das ist die Summe von 6 GWGs, nicht eine Einheit.",
+    es:"<b>Wichtige Unterscheidung:</b> Gleiche Möbel sind keine Einheit, sondern einzeln nutzbar. Anders bei einer Anlage aus mehreren Komponenten (PC-Set).",
+    pr:"Im Schul-Heft von Aleks: \"6 Vorhänge mit gleichem Muster zu je 50 € = Einheit 300 € → GWG\" – einzelne Wirtschaftsgüter, jedes für sich GWG."
+  },
+  {id:'c059',firma:'iphone',topic:'anlagen',difficulty:'s',
+    t:"Aleks iPhone kauft <b>ein PC-Set</b> bei Mindfactory: 1 Stand-PC um 800 € + 1 Tastatur um 100 € + 1 Bildschirm um 700 € (alles zusammen für den Buchhaltungsplatz). <b>Zahlung auf Rechnung</b>, 20% USt. Die Komponenten bilden eine Einheit.",
+    meta:["800 + 100 + 700 = 1.600 € netto","Einheit > 1.000 € → KEIN GWG","Aktivieren auf 0620 EDV","+ 20% USt = 320 €","Brutto: 1.920 €"],
+    g:1920, s:["0620","2500"], h:["3300"],
+    sa:{"0620":1600,"2500":320}, ha:{"3300":1920},
+    e:"PC + Tastatur + Bildschirm = <b>Einheit</b> (gemeinsam nutzbar). 1.600 € netto > 1.000 € → aktivieren auf <b>0620 Büromaschinen/EDV</b>, später über Nutzungsdauer abschreiben.",
+    es:"<b>EDV-Konto 0620:</b> Computer, Laptops, Monitore, Drucker, Server. Software extra → 0120 (Datenverarbeitungsprogramme).",
+    pr:"Nutzungsdauer EDV in AT: 3 Jahre (kürzer als Möbel, weil EDV schneller veraltet). Bei 1.600 € → 533,33 € AfA pro Jahr für 3 Jahre."
+  },
+  {id:'c060',firma:'sneakers',topic:'anlagen',difficulty:'m',
+    t:"Aleks-Sneakers kauft <b>einen Klein-LKW</b> für die Auslieferung an Shops um <b>32.000 € netto</b> bei Ford Wien. <b>Zahlung auf Rechnung</b>, 20% USt. Bei LKW gibt es KEINE NoVA und Vorsteuer-Abzug ist möglich.",
+    meta:["32.000 € netto","+ 20% USt = 6.400 €","Brutto: 38.400 €","LKW: VSt-Abzug ja, KEINE NoVA"],
+    g:38400, s:["0640","2500"], h:["3300"],
+    sa:{"0640":32000,"2500":6400}, ha:{"3300":38400},
+    e:"LKW → Konto <b>0640</b>. Bei LKWs ist die <b>Vorsteuer voll abzugsfähig</b> und es fällt <b>KEINE NoVA</b> (Normverbrauchsabgabe) an.",
+    es:"<b>NoVA-Eselsbrücke:</b> NoVA = nur bei PKW & Kombi (0630). NICHT bei LKW (0640) und NICHT bei Elektrofahrzeugen (0641). Faustregel: NoVA nur für \"normale Autos\".",
+    pr:"NoVA ist die österreichische CO2-Abgabe beim Autokauf. Sie macht PKWs in AT deutlich teurer als in DE. Bei Tesla & Co. = 0 €, weshalb E-Autos in AT extrem populär wurden."
+  },
+  {id:'c061',firma:'sneakers',topic:'anlagen',difficulty:'s',
+    t:"Aleks-Sneakers kauft <b>einen PKW für den Geschäftsführer</b> um <b>40.000 € netto</b> bei Wiesenthal Wien. Auf der Rechnung: 40.000 € netto + 8.000 € USt + <b>4.800 € NoVA</b>. <b>Zahlung auf Rechnung</b>. Bei PKW: <b>KEIN Vorsteuer-Abzug, NoVA muss aktiviert werden</b>.",
+    meta:["Netto 40.000 + USt 8.000 + NoVA 4.800","= Brutto 52.800 €","PKW: KEIN VSt-Abzug!","NoVA-Brutto muss aktiviert werden"],
+    g:52800, s:["0630"], h:["3300"],
+    sa:{"0630":52800}, ha:{"3300":52800},
+    e:"PKW (<b>0630</b>): <b>KEIN Vorsteuer-Abzug</b> – die 8.000 € USt landen mit im Anlagewert. Auch die NoVA von 4.800 € muss aktiviert werden. Aktivierungsbasis: Bruttobetrag inkl. USt + NoVA = 52.800 €.",
+    es:"<b>PKW-Sonderregel:</b> Privatnutzung wird angenommen → kein VSt-Abzug. Daher: PKW immer BRUTTO aktivieren (mit USt + NoVA drin). Bei LKW dagegen: Netto aktivieren + VSt absetzen.",
+    pr:"Genau deshalb fahren so viele österreichische Selbständige Pickups oder Kastenwägen (gelten als LKW): Voller VSt-Abzug, keine NoVA. Bei einem 50.000-€-Wagen sind das schnell 12.000+ € Steuerersparnis."
+  },
+  {id:'c062',firma:'iphone',topic:'anlagen',difficulty:'m',
+    t:"Aleks iPhone kauft <b>ein Tesla Model Y</b> für den Außendienst um <b>50.000 € netto</b>. <b>Zahlung auf Rechnung</b>, 20% USt. Bei Elektrofahrzeugen: <b>Voller Vorsteuer-Abzug, KEINE NoVA</b>.",
+    meta:["50.000 € netto","+ 20% USt = 10.000 €","Brutto: 60.000 €","E-Auto: VSt-Abzug ja, KEINE NoVA"],
+    g:60000, s:["0641","2500"], h:["3300"],
+    sa:{"0641":50000,"2500":10000}, ha:{"3300":60000},
+    e:"Elektrofahrzeug → Konto <b>0641</b>. Bei E-Autos ist die <b>Vorsteuer voll abzugsfähig</b> und es fällt <b>KEINE NoVA</b> an – wie bei LKWs. Großer Steuervorteil!",
+    es:"<b>E-Auto vs. Verbrenner-PKW:</b> 0641 = E-Auto, 0630 = Verbrenner. Beim E-Auto VSt voll abziehbar, kein NoVA-Anteil. Beim Verbrenner umgekehrt.",
+    pr:"Der Grund warum E-Autos in AT so beliebt wurden bei Firmenkäufen: Steuersystem extrem günstig. Bei 50.000 € E-Auto sparst du ~14.000 € (USt + NoVA) gegen einen vergleichbaren Verbrenner."
+  },
+  {id:'c063',firma:'iphone',topic:'anlagen',difficulty:'s',
+    t:"Aleks iPhone kauft <b>einen LKW um 35.000 € netto</b> + <b>Sonderausstattung</b> (Klimaanlage 1.500 € + Navi 800 € + Alufelgen 1.200 €) bei MAN Wien. <b>Zahlung auf Rechnung</b>, 20% USt. Sonderausstattung muss <b>mit aktiviert</b> werden.",
+    meta:["LKW 35.000 € + Klima 1.500 + Navi 800 + Felgen 1.200","= 38.500 € netto","+ 20% USt = 7.700 €","Brutto: 46.200 €"],
+    g:46200, s:["0640","2500"], h:["3300"],
+    sa:{"0640":38500,"2500":7700}, ha:{"3300":46200},
+    e:"Sonderausstattungen müssen <b>zum Anlagewert aktiviert</b> werden – sie sind Teil der Anschaffungskosten. Klima, Alufelgen, Allradantrieb, Navi → alles auf 0640 (LKW).",
+    es:"<b>Aktivierungsfähig sind ALLE einmaligen Anschaffungskosten:</b> Lieferkosten zur uns, Aufstellung, Einschulung der Mitarbeiter, Sonderausstattung, Anmeldegebühren. Erst LAUFENDE Kosten (Service, Sprit, Versicherung) sind Aufwand.",
+    pr:"Bei großen Anlagen (Maschinen) ist die Aktivierungsfrage Bilanz-relevant. Auch Architektur-Honorare beim Hausbau gehören dazu — kann Hunderttausende ausmachen."
+  },
+  {id:'c064',firma:'savoy',topic:'anlagen',difficulty:'s',
+    t:"Le Savon kauft <b>eine Seifenform-Maschine um 15.000 € netto</b> bei Anlagenbau Wien. Zusätzlich auf derselben Rechnung: <b>Transport per Spedition 800 € netto</b> und <b>Einschulung der Mitarbeiter durch den Hersteller 1.200 € netto</b>. Alle Posten 20% USt. <b>Zahlung auf Ziel</b>.",
+    meta:["Maschine 15.000 + Transport 800 + Einschulung 1.200","= 17.000 € netto","+ 20% USt = 3.400 €","Brutto: 20.400 €"],
+    g:20400, s:["0400","2500"], h:["3300"],
+    sa:{"0400":17000,"2500":3400}, ha:{"3300":20400},
+    e:"Auch Transport und Einschulung gehören zu den <b>Anschaffungskosten</b> und werden mit aktiviert. Alle drei Posten (Maschine + Transport + Einschulung) zusammen auf 0400 Maschinen.",
+    es:"<b>Was darf aktiviert werden? Faustregel:</b> Alles, was NÖTIG ist, um die Anlage einsatzbereit zu machen. Transport JA, Einschulung JA, erste Wartung JA. Aber: monatliche Reinigung NEIN, Stromkosten NEIN (laufender Aufwand).",
+    pr:"Die Praxis im Bilanzrecht: Was \"einmalig zur Inbetriebnahme nötig\" ist, wird aktiviert. Streitpunkt bei Steuerprüfungen: Schulungskosten oft als Aufwand gebucht, dann werden sie nachträglich aktiviert (Bilanzkorrektur)."
+  },
+  {id:'c065',firma:'iphone',topic:'anlagen',difficulty:'l',
+    t:"Aleks iPhone <b>schreibt am Jahresende den Tesla ab</b>. Anlagewert (vor 1 Jahr aktiviert auf 0641): 50.000 €. Nutzungsdauer: 8 Jahre → 6.250 € jährliche AfA. <b>Interne Buchung</b>.",
+    meta:["50.000 € ÷ 8 Jahre","= 6.250 € jährliche AfA","Interne Buchung, keine USt"],
+    g:6250, s:["7010"], h:["0641"],
+    sa:{"7010":6250}, ha:{"0641":6250},
+    e:"Abschreibung am Jahresende: <b>7010 Abschreibung Sachanlagen</b> im Soll (Aufwand), Anlage-Konto <b>0641</b> im Haben (Wertminderung). Lineare AfA: gleichmäßig über Nutzungsdauer.",
+    es:"<b>AfA-Konto vs. Anlagen-Konto:</b> 7010 = Aufwand (alle Sachanlagen). 7030 = Sofortabschreibung GWG. Im Soll ist immer der Aufwand, im Haben das, was an Wert verliert.",
+    pr:"Nutzungsdauern in AT: Computer 3 Jahre, PKW/E-Auto 8 Jahre, LKW 5–8 Jahre, Maschinen 5–15 Jahre, Gebäude 33 Jahre (3% AfA-Satz)."
+  },
+  {id:'c066',firma:'iphone',topic:'anlagen',difficulty:'m',
+    t:"Aleks iPhone hat im laufenden Jahr GWGs <b>auf Konto 0680 in Höhe von 2.400 € aktiviert</b> (klassische Methode statt Sofortabschreibung). Jetzt am Jahresende: <b>volle Abschreibung dieser GWGs</b>. <b>Interne Buchung</b>.",
+    meta:["GWG-Bestand: 2.400 €","Volle Abschreibung am Jahresende","Interne Buchung, keine USt"],
+    g:2400, s:["7030"], h:["0680"],
+    sa:{"7030":2400}, ha:{"0680":2400},
+    e:"Klassische GWG-Methode: GWG werden im Jahr des Kaufs auf 0680 aktiviert, am Jahresende voll auf <b>7030</b> abgeschrieben. Endbestand 0680 nach dieser Buchung = 0.",
+    es:"<b>2 Methoden für GWG:</b> 1) Klassisch: 0680 beim Kauf, 7030 am Jahresende. 2) Sofort: direkt 7030 beim Kauf. Methode 2 spart eine Buchung — beide rechtlich erlaubt.",
+    pr:"In der Praxis wird fast nur noch Methode 2 (Sofort-Buchung auf 7030) verwendet — schlanker, weniger Buchungen. Methode 1 nur, wenn man die GWG getrennt sehen will (z.B. Inventarlisten)."
+  },
+  {id:'c067',firma:'sneakers',topic:'anlagen',difficulty:'s',
+    t:"Aleks-Sneakers <b>verkauft einen alten Klein-LKW</b> an einen Privatkunden um <b>8.000 € netto</b>. Der LKW hat noch einen <b>Buchwert von 5.000 €</b> auf Konto 0640 (nach AfA). <b>Zahlung per Bank</b>, 20% USt. Hier ist nur der <b>Verkauf</b> gefragt — Ausbuchung des Buchwerts folgt separat.",
+    meta:["8.000 € netto","+ 20% USt = 1.600 €","Brutto: 9.600 €","Erlös über Buchwert → Gewinn"],
+    g:9600, s:["2800"], h:["4600","3500"],
+    sa:{"2800":9600}, ha:{"4600":8000,"3500":1600},
+    e:"Anlagenverkauf: Erlös geht auf <b>4600 Erlöse aus dem Abgang von Anlagen</b> (NICHT 4000 — das ist nur für Handelswaren). USt wie üblich.",
+    es:"<b>Sonder-Erlöskonto 4600:</b> Speziell für Anlagenverkäufe. Wichtig zur Trennung von operativen Erlösen — sonst denkt man, das Geschäft läuft besser als es tut. Ist außerordentliches Ergebnis.",
+    pr:"Beim Anlagenverkauf wird der Buchwert separat ausgebucht (gegen 7820 Buchwert abgegangener Anlagen). Erlös 8.000 € − Buchwert 5.000 € = 3.000 € Veräußerungsgewinn — Bonus für die GuV."
+  },
+  {id:'c075',firma:'iphone',topic:'fx',difficulty:'m',
+    t:"<b>Innergemeinschaftliche Lieferung nach Ungarn:</b> Aleks iPhone verkauft 40 iPhone 15 an MobilTech Budapest. Stückpreis: 880 € netto, <b>Verkauf auf Rechnung</b>. UID geprüft → <b>steuerfrei nach Art. 7 UStG</b>. Ungarn ist EU-Mitgliedsstaat.",
+    meta:["40 × 880 € = 35.200 €","Ungarn = EU-Mitglied","STEUERFREI mit UID","Konto 4010"],
+    g:35200, s:["2000"], h:["4010"],
+    sa:{"2000":35200}, ha:{"4010":35200},
+    e:"<b>ig. Lieferung nach Ungarn:</b> Wie alle EU-Lieferungen — Konto 4010, steuerfrei. Ungarn nutzt zwar den Forint (HUF) als Währung, aber als EU-Mitglied gilt das <b>Bestimmungslandprinzip</b>: Der ungarische Käufer zahlt die ungarische MwSt selbst (Reverse Charge).",
+    es:"<b>Bestimmungslandprinzip:</b> Das Land, das die Ware ERHÄLT, muss die MwSt abführen — nicht das Land, das die Ware liefert. Daher: Wir Österreicher liefern steuerfrei, der ungarische Käufer macht Reverse Charge.",
+    pr:"Ungarn hat 27% MwSt — höchste in der EU. Daher kaufen viele Ungarn nahe der Grenze in Österreich (20%) ein. Bei B2C funktioniert das aber nur bis zur Lieferschwelle, sonst muss man dort registrieren."
+  },
+  {id:'c076',firma:'iphone',topic:'fx',difficulty:'m',
+    t:"<b>Export nach Süd-Afrika in ZAR:</b> Aleks iPhone exportiert 50 iPhone 15 an MobileCape Town. Rechnung: <b>ZAR 900.000, Verkauf auf Ziel</b>. Wechselkurs am Rechnungstag: <b>1 EUR = 20 ZAR</b>. Süd-Afrika = Drittland, steuerfrei mit Ausfuhrnachweis.",
+    meta:["900.000 ZAR ÷ 20 = 45.000 €","Süd-Afrika = Drittland","STEUERFREI mit Ausfuhrnachweis","Konto 4015"],
+    g:45000, s:["2000"], h:["4015"],
+    sa:{"2000":45000}, ha:{"4015":45000},
+    e:"<b>Drittland-Export Süd-Afrika:</b> ZAR (Südafrikanischer Rand) ÷ Kurs = EUR-Forderung. 900.000 ÷ 20 = 45.000 €. Konto 4015 (Erlöse Exporte 0%), steuerfrei.",
+    es:"<b>ZAR = Südafrikanischer Rand:</b> Volatile Schwellenland-Währung. Typische Kurse 18-25 ZAR/EUR. Mit Spesen-Regel: Bei Export → höherer Kurs ist besser (mehr EUR pro ZAR). Bei Import: niedriger Kurs ist besser.",
+    pr:"Süd-Afrika ist Österreichs größter afrikanischer Handelspartner. Hauptexporte: Maschinen, Pharmazeutika. Hauptimporte: Edelmetalle (Platin, Gold), Wein, Früchte. ZAR-Wechselkurs schwankt stark mit Rohstoffpreisen."
+  }
+];
+
+// ============================================================
+// METADATEN
+// ============================================================
+const firmen = {
+  savoy:{name:"Le Savon",icon:"🧼",desc:"Junior Company · Seifenproduktion Wien"},
+  iphone:{name:"Aleks iPhone Import/Export GmbH",icon:"📱",desc:"Apple-Großhandel · Import USA/Japan · Export EU/weltweit"},
+  sneakers:{name:"Aleks-Sneakers GmbH",icon:"👟",desc:"Sneaker-Handel · Nike, Adidas, Yeezys"}
+};
+const topics = {
+  skonti:{name:"Skonti & Rabatte",desc:"Skonti, Mengenrabatte, Kreditkarte"},
+  bezug:{name:"Bezugs- & Versandkosten",desc:"Eingangs-/Ausgangsfrachten, Versand"},
+  rueck:{name:"Warenrücksendungen",desc:"Reklamationen, Gutschriften"},
+  spesen:{name:"Spesen",desc:"Bank-, Mahn-, Telefon-, Versicherung"},
+  anlagen:{name:"Anlagen & GWG",desc:"PKW, LKW, GWG, NoVA, Sonderausstattung"},
+  fx:{name:"Auslandsgeschäfte & FX",desc:"EU, Drittland, Kursdifferenzen"},
+  produktion:{name:"Produktion & Material",desc:"Rohstoffe, Hilfsstoffe, Fertigung"}
+};
+const levels = {
+  nasenbohrer:{name:"Nasenbohrer",icon:"🤏",count:8,desc:"Leichte Fälle · Tipps auf Knopfdruck",color:"#eab308",points:10,difficulty:'l'},
+  checker:{name:"Checker",icon:"😎",count:12,desc:"Mittlere Fälle · Tipps auf Knopfdruck",color:"#3b82f6",points:15,difficulty:'m'},
+  blitzkneisser:{name:"Blitzkneisser",icon:"🚀",count:16,desc:"Schwere Fälle · Tipps auf Knopfdruck",color:"#7c3aed",points:20,difficulty:'s'}
+};
+const difficulties = {
+  l:{name:"Leicht",desc:"2-3 Konten, Standard-USt"},
+  m:{name:"Mittel",desc:"3-4 Konten, Konten-Logik"},
+  s:{name:"Schwer",desc:"4-6 Konten, FX, Skonto"}
+};
+
+// ============================================================
+// STATE
+// ============================================================
+let cur = 0, geschafft = 0, strk = 0;
+let pS = [], pH = [];
+let activeTab = '0';
+let searchTerm = '';
+let selectedTopics = new Set(['fx']);
+let selectedLevel = 'checker';
+let activeCases = [];
+let caseResults = []; // results of current run: {id, correct} for each case
+let firstAttemptCorrect = true; // tracks if current case was answered correctly on first try
+let statusFilter = null; // null | 'neu' | 'nichtgekonnt' | 'wackelig' | 'gekonnt' | 'mastered'
+
+// ============================================================
+// SPACED REPETITION — LocalStorage
+// ============================================================
+const STORAGE_KEY = 'aleks_quiz_progress_v1';
+
+// History per case:
+// { caseId: { correctStreak: int, totalAttempts: int, correctAttempts: int, lastSeen: timestamp } }
+function loadHistory() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch(e) { return {}; }
+}
+function saveHistory(h) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(h)); } catch(e) {}
+}
+function getCaseStatus(caseId) {
+  const h = loadHistory();
+  const entry = h[caseId];
+  if (!entry || entry.totalAttempts === 0) return 'neu';
+  if (entry.correctStreak >= 3) return 'mastered';
+  if (entry.correctStreak >= 2) return 'gekonnt';
+  // Check last result
+  const lastWasCorrect = entry.correctStreak > 0;
+  if (!lastWasCorrect) return 'nichtgekonnt';
+  return 'wackelig'; // mix of correct and incorrect
+}
+function recordResult(caseId, correct) {
+  const h = loadHistory();
+  if (!h[caseId]) h[caseId] = { correctStreak: 0, totalAttempts: 0, correctAttempts: 0, lastSeen: 0 };
+  h[caseId].totalAttempts += 1;
+  h[caseId].lastSeen = Date.now();
+  if (correct) {
+    h[caseId].correctAttempts += 1;
+    h[caseId].correctStreak += 1;
+  } else {
+    h[caseId].correctStreak = 0;
+  }
+  saveHistory(h);
+}
+function getStatusCounts(pool) {
+  const counts = { neu:0, nichtgekonnt:0, wackelig:0, gekonnt:0, mastered:0 };
+  pool.forEach(c => { counts[getCaseStatus(c.id)] += 1; });
+  return counts;
+}
+
+// Smart selection: prioritize weak cases
+function selectCasesForRun(pool, targetCount) {
+  if (pool.length === 0) return [];
+  
+  // Group by status
+  const byStatus = { neu:[], nichtgekonnt:[], wackelig:[], gekonnt:[], mastered:[] };
+  pool.forEach(c => byStatus[getCaseStatus(c.id)].push(c));
+  
+  // Shuffle each group
+  Object.keys(byStatus).forEach(k => byStatus[k].sort(() => Math.random() - 0.5));
+  
+  // Target distribution: 35% nichtgekonnt+wackelig, 30% neu, 25% gekonnt, 10% mastered
+  // Prefer in this order, fall back if not enough available
+  const targets = [
+    { groups: ['nichtgekonnt','wackelig'], share: 0.50 },
+    { groups: ['neu'], share: 0.30 },
+    { groups: ['gekonnt'], share: 0.15 },
+    { groups: ['mastered'], share: 0.05 }
+  ];
+  
+  const selected = [];
+  const remaining = JSON.parse(JSON.stringify({
+    neu: byStatus.neu.map(c => c.id),
+    nichtgekonnt: byStatus.nichtgekonnt.map(c => c.id),
+    wackelig: byStatus.wackelig.map(c => c.id),
+    gekonnt: byStatus.gekonnt.map(c => c.id),
+    mastered: byStatus.mastered.map(c => c.id)
+  }));
+  const idMap = {};
+  pool.forEach(c => idMap[c.id] = c);
+  
+  for (const t of targets) {
+    const want = Math.ceil(targetCount * t.share);
+    let taken = 0;
+    for (const g of t.groups) {
+      while (taken < want && remaining[g].length > 0 && selected.length < targetCount) {
+        selected.push(idMap[remaining[g].shift()]);
+        taken++;
+      }
+      if (selected.length >= targetCount) break;
+    }
+    if (selected.length >= targetCount) break;
+  }
+  
+  // Fill remaining slots from any remaining cases (cycle through all)
+  const leftover = Object.values(remaining).flat();
+  while (selected.length < targetCount && leftover.length > 0) {
+    selected.push(idMap[leftover.shift()]);
+  }
+  
+  // If still not enough (pool smaller than target), repeat
+  while (selected.length < targetCount && pool.length > 0) {
+    const extra = [...pool].sort(() => Math.random() - 0.5);
+    for (const c of extra) {
+      if (selected.length >= targetCount) break;
+      selected.push(c);
+    }
+  }
+  
+  return selected.slice(0, targetCount);
+}
+
+const statusInfo = {
+  neu:        { name:'Neu',           icon:'🆕', color:'#6b7280' },
+  nichtgekonnt:{ name:'Nicht gekonnt', icon:'❌', color:'#dc2626' },
+  wackelig:   { name:'Wackelig',       icon:'🤔', color:'#d97706' },
+  gekonnt:    { name:'Gekonnt',        icon:'✅', color:'#059669' },
+  mastered:   { name:'Mastered',       icon:'🏆', color:'#7c3aed' }
+};
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderIntro() {
+  document.getElementById('topStats').style.display = 'none';
+  document.getElementById('topProgress').style.display = 'none';
+  statusFilter = null;
+  
+  const companiesHtml = Object.entries(firmen).map(([k,f]) => `
+    <div class="company">
+      <span class="ico">${f.icon}</span>
+      <div class="name">${f.name}</div>
+      <div class="desc">${f.desc}</div>
+    </div>
+  `).join('');
+
+  const levelsHtml = Object.entries(levels).map(([k,l]) => {
+    const count = allCases.filter(c => c.difficulty === l.difficulty).length;
+    return `
+      <div class="level ${selectedLevel === k ? 'selected' : ''}" data-level="${k}">
+        <span class="lico">${l.icon}</span>
+        <div class="lname">${l.name}</div>
+        <div class="ldesc">${l.desc}</div>
+        <div class="lcount">${l.count} FÄLLE · ${count} verfügbar</div>
+      </div>
+    `;
+  }).join('');
+  
+  const topicsHtml = Object.entries(topics).map(([k,t]) => {
+    const count = allCases.filter(c => c.topic === k).length;
+    return `
+      <div class="topic ${selectedTopics.has(k) ? 'selected' : ''}" data-topic="${k}">
+        <span class="tname">${t.name}</span>
+        <span class="tcnt">${count} Fälle · ${t.desc}</span>
+      </div>
+    `;
+  }).join('');
+  
+  const counts = getStatusCounts(allCases);
+  const hasAnyHistory = Object.values(counts).reduce((a,b) => a+b, 0) > counts.neu;
+  
+  const statsHtml = hasAnyHistory ? `
+    <div class="section-label">DEIN LERNFORTSCHRITT — FILTER NACH STATUS</div>
+    <div class="stats-dashboard">
+      <div class="stats-grid">
+        ${Object.entries(statusInfo).map(([k,s]) => `
+          <button class="stat-box ${statusFilter === k ? 'active' : ''}" data-status="${k}">
+            <span class="ico">${s.icon}</span>
+            <span class="val">${counts[k]}</span>
+            <span class="lbl">${s.name}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="filter-info" id="filterInfo">
+        ${statusFilter ? `Filter: nur <b>${statusInfo[statusFilter].name}</b> ${statusInfo[statusFilter].icon}` : 'Klicke einen Status an, um nur solche Fälle zu üben'}
+        <button class="reset-btn" onclick="resetProgress()">Lernstand löschen</button>
+      </div>
+    </div>
+  ` : '';
+  
+  document.getElementById('qc').innerHTML = `
+    <div class="card intro">
+      <h2>Servus Aleks! 👋</h2>
+      <p>Wähle dein Level und die Themen — dann gehts los! Das System merkt sich, was du schon kannst und priorisiert die Fälle, bei denen du noch wackelig bist.</p>
+      
+      ${statsHtml}
+      
+      <div class="section-label">DEINE FIRMEN</div>
+      <div class="companies">${companiesHtml}</div>
+      
+      <div class="section-label">LEVEL — JE H&Ouml;HER, DESTO SCHWIERIGER</div>
+      <div class="levels">${levelsHtml}</div>
+      
+      <div class="section-label">THEMEN (mind. 1)</div>
+      <div class="topics">${topicsHtml}</div>
+      
+      <div class="start-row">
+        <div class="selected-info" id="poolInfo"></div>
+        <button class="btn btn-primary btn-large" id="startBtn">Quiz starten →</button>
+      </div>
+    </div>
+  `;
+  
+  document.querySelectorAll('.level').forEach(l => {
+    l.addEventListener('click', () => {
+      selectedLevel = l.dataset.level;
+      document.querySelectorAll('.level').forEach(x => x.classList.remove('selected'));
+      l.classList.add('selected');
+      updatePoolCount();
+    });
+  });
+  
+  document.querySelectorAll('.stat-box').forEach(b => {
+    b.addEventListener('click', () => {
+      const status = b.dataset.status;
+      if (statusFilter === status) {
+        statusFilter = null;
+      } else {
+        statusFilter = status;
+      }
+      renderIntro(); // re-render to update UI
+    });
+  });
+  
+  document.querySelectorAll('.topic').forEach(t => {
+    t.addEventListener('click', () => {
+      const topic = t.dataset.topic;
+      if (selectedTopics.has(topic)) selectedTopics.delete(topic);
+      else selectedTopics.add(topic);
+      t.classList.toggle('selected');
+      updatePoolCount();
+    });
+  });
+  
+  document.getElementById('startBtn').addEventListener('click', startQuiz);
+  updatePoolCount();
+}
+
+function resetProgress() {
+  if (confirm('Wirklich den gesamten Lernstand löschen? Alle gespeicherten Ergebnisse gehen verloren.')) {
+    localStorage.removeItem(STORAGE_KEY);
+    renderIntro();
+  }
+}
+
+function updatePoolCount() {
+  const levelDiff = levels[selectedLevel].difficulty;
+  let pool = allCases.filter(c => selectedTopics.has(c.topic) && c.difficulty === levelDiff);
+  if (statusFilter) {
+    pool = pool.filter(c => getCaseStatus(c.id) === statusFilter);
+  }
+  const target = levels[selectedLevel].count;
+  const filterInfo = statusFilter ? ` · nur <b>${statusInfo[statusFilter].name}</b> ${statusInfo[statusFilter].icon}` : '';
+  document.getElementById('poolInfo').innerHTML = 
+    `<b>${pool.length}</b> Fälle im Pool · <b>${target}</b> ${levels[selectedLevel].icon} ${levels[selectedLevel].name}-Runde${filterInfo}`;
+  document.getElementById('startBtn').disabled = pool.length < 1 || selectedTopics.size === 0;
+}
+
+function startQuiz() {
+  const levelDiff = levels[selectedLevel].difficulty;
+  let pool = allCases.filter(c => selectedTopics.has(c.topic) && c.difficulty === levelDiff);
+  if (statusFilter) {
+    pool = pool.filter(c => getCaseStatus(c.id) === statusFilter);
+  }
+  if (pool.length === 0) return;
+  
+  const targetCount = levels[selectedLevel].count;
+  
+  // Use smart selection (only if no explicit filter — if filter is set, use simple random)
+  if (statusFilter) {
+    let shuffled = [...pool].sort(() => Math.random() - 0.5);
+    while (shuffled.length < targetCount && pool.length > 0) {
+      shuffled = shuffled.concat([...pool].sort(() => Math.random() - 0.5));
+    }
+    activeCases = shuffled.slice(0, targetCount);
+  } else {
+    activeCases = selectCasesForRun(pool, targetCount);
+  }
+  
+  cur = 0; geschafft = 0; strk = 0;
+  caseResults = [];
+  document.getElementById('topStats').style.display = 'flex';
+  document.getElementById('topProgress').style.display = 'block';
+  document.getElementById('sl').textContent = levels[selectedLevel].icon;
+  render();
+}
+
+function render() {
+  if (cur >= activeCases.length) return done();
+  const c = activeCases[cur];
+  pS = []; pH = [];
+  searchTerm = '';
+  activeTab = '0';
+  firstAttemptCorrect = true; // reset for new case
+  const firma = firmen[c.firma];
+  const topic = topics[c.topic];
+  const level = levels[selectedLevel];
+
+  document.getElementById('sc').textContent = cur + 1;
+  document.getElementById('sct').textContent = `von ${activeCases.length}`;
+  document.getElementById('pf').style.width = (cur / activeCases.length * 100) + '%';
+
+  let tabsHtml = '';
+  for (let i = 0; i <= 9; i++) {
+    tabsHtml += `<div class="tab ${activeTab === String(i) ? 'active' : ''}" data-tab="${i}">${i} · ${klassen[i]}</div>`;
+  }
+
+  // Tips: on button click for all levels (uniform behavior)
+  let hintHtml = '';
+  if (c.meta) {
+    hintHtml = `
+      <button class="tip-toggle" id="tipBtn">💡 Tipp anzeigen</button>
+      <div class="calc-hint" id="tipBox" style="display:none">
+        <span class="h">💡 Hilfen zur Berechnung</span>
+        ${c.meta.map(m => `<div>${m}</div>`).join('')}
+      </div>
+    `;
+  }
+
+  document.getElementById('qc').innerHTML = `
+    <div class="card">
+      <div class="case-header">
+        <div>
+          <div class="case-label">Geschäftsfall ${cur + 1} / ${activeCases.length}</div>
+        </div>
+        <div class="case-badges">
+          <div class="case-level ${selectedLevel}">${level.icon} ${level.name}</div>
+          <div class="case-topic">${topic.name}</div>
+        </div>
+      </div>
+      <div class="case-firma">${firma.icon} ${firma.name}</div>
+      <div class="case-text">${c.t}</div>
+      ${hintHtml}
+      <div class="case-amount"><span class="lbl">Betrag (Bruttosumme)</span>€ ${c.g.toLocaleString('de-AT', {minimumFractionDigits: 2})}</div>
+
+      <div class="browser">
+        <div class="browser-head">
+          <div class="search-box">
+            <span class="search-icon">⌕</span>
+            <input type="text" id="search" placeholder="Konto suchen (Name oder Nummer)..." autocomplete="off">
+            <button class="clear-search" id="clearSearch">×</button>
+          </div>
+        </div>
+        <div class="tab-label">KONTENKLASSE WÄHLEN</div>
+        <div class="tabs" id="tabs">${tabsHtml}</div>
+        <div class="chips-count" id="chipsCount"></div>
+        <div class="chips" id="chips"></div>
+      </div>
+
+      <div class="booking">
+        <div class="zone soll" id="zs" data-z="soll">
+          <div class="zone-label">SOLL</div>
+          <div class="zone-content" id="zs-content"></div>
+          <div class="zone-sum"><span>SUMME</span><span class="v" id="zs-sum">€ 0,00</span></div>
+        </div>
+        <div class="an">an</div>
+        <div class="zone haben" id="zh" data-z="haben">
+          <div class="zone-label">HABEN</div>
+          <div class="zone-content" id="zh-content"></div>
+          <div class="zone-sum"><span>SUMME</span><span class="v" id="zh-sum">€ 0,00</span></div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="bback" style="margin-right:auto">← Übersicht</button>
+        <button class="btn btn-secondary" id="br">Zurücksetzen</button>
+        <button class="btn btn-primary" id="bc">Prüfen</button>
+      </div>
+
+      <div class="feedback" id="fb"></div>
+    </div>
+  `;
+
+  renderChips();
+  renderZones();
+  setupDropZones();
+  setupBrowser();
+  
+  // Tip toggle for all levels
+  if (c.meta) {
+    document.getElementById('tipBtn').onclick = () => {
+      const box = document.getElementById('tipBox');
+      const btn = document.getElementById('tipBtn');
+      if (box.style.display === 'none') {
+        box.style.display = 'block';
+        btn.textContent = '💡 Tipp ausblenden';
+      } else {
+        box.style.display = 'none';
+        btn.textContent = '💡 Tipp anzeigen';
+      }
+    };
+  }
+  
+  document.getElementById('bc').onclick = check;
+  document.getElementById('br').onclick = render;
+  document.getElementById('bback').onclick = () => {
+    if (confirm('Wirklich zur Übersicht zurück? Der aktuelle Quiz-Lauf wird abgebrochen (gespeicherter Lernfortschritt bleibt erhalten).')) {
+      renderIntro();
+    }
+  };
+}
+
+function getKontenForView() {
+  if (searchTerm.length > 0) {
+    const term = searchTerm.toLowerCase();
+    return Object.keys(kontenrahmen).filter(k => 
+      k.toLowerCase().includes(term) || kontenrahmen[k].toLowerCase().includes(term)
+    ).slice(0, 60);
+  }
+  return Object.keys(kontenrahmen).filter(k => k.charAt(0) === activeTab);
+}
+
+function isPlaced(k) {
+  return pS.some(x => x.k === k) || pH.some(x => x.k === k);
+}
+
+function setupBrowser() {
+  const search = document.getElementById('search');
+  const clearBtn = document.getElementById('clearSearch');
+  search.addEventListener('input', e => {
+    searchTerm = e.target.value.trim();
+    clearBtn.classList.toggle('visible', searchTerm.length > 0);
+    renderChips();
+  });
+  clearBtn.addEventListener('click', () => {
+    searchTerm = '';
+    search.value = '';
+    clearBtn.classList.remove('visible');
+    renderChips();
+  });
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => {
+      activeTab = t.dataset.tab;
+      searchTerm = '';
+      search.value = '';
+      clearBtn.classList.remove('visible');
+      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      renderChips();
+    });
+  });
+}
+
+function renderChips() {
+  const chips = document.getElementById('chips');
+  const countEl = document.getElementById('chipsCount');
+  const list = getKontenForView();
+  
+  if (searchTerm.length > 0) {
+    countEl.textContent = list.length === 0 ? 'Keine Treffer' : `${list.length} Treffer für "${searchTerm}"${list.length === 60 ? ' (gekürzt)' : ''}`;
+  } else {
+    countEl.textContent = `KLASSE ${activeTab} · ${list.length} Konten`;
+  }
+  
+  chips.innerHTML = '';
+  if (list.length === 0) {
+    chips.innerHTML = '<div class="chips-empty">Keine passenden Konten gefunden.</div>';
+    return;
+  }
+  list.forEach(k => {
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (isPlaced(k) ? ' placed' : '');
+    chip.draggable = !isPlaced(k);
+    chip.dataset.k = k;
+    chip.innerHTML = `<span class="nr">${k}</span><span class="nm">${kontenrahmen[k]}</span>`;
+    if (!isPlaced(k)) {
+      chip.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('k', k);
+        e.dataTransfer.setData('from', '');
+        chip.classList.add('dragging');
+      });
+      chip.addEventListener('dragend', () => chip.classList.remove('dragging'));
+    }
+    chips.appendChild(chip);
+  });
+}
+
+function renderZones() {
+  renderZone('soll', pS);
+  renderZone('haben', pH);
+  updateSums();
+}
+
+function renderZone(side, list) {
+  const id = side === 'soll' ? 'zs-content' : 'zh-content';
+  const el = document.getElementById(id);
+  el.innerHTML = '';
+  list.forEach((entry, idx) => {
+    const row = document.createElement('div');
+    row.className = 'placed-row';
+    row.draggable = true;
+    row.dataset.k = entry.k;
+    row.dataset.side = side;
+    row.dataset.idx = idx;
+    row.innerHTML = `
+      <div class="label">
+        <span class="nr">${entry.k}</span>
+        <span class="nm">${kontenrahmen[entry.k]}</span>
+      </div>
+      <input type="number" step="0.01" placeholder="0.00" value="${entry.amount || ''}" data-side="${side}" data-idx="${idx}">
+      <button class="remove" data-side="${side}" data-idx="${idx}" title="Entfernen">×</button>
+    `;
+    // Drag handlers — only fire if user grabs the row (not input/button)
+    row.addEventListener('dragstart', e => {
+      // Don't start drag from the input field or remove button
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') {
+        e.preventDefault();
+        return;
+      }
+      e.dataTransfer.setData('k', entry.k);
+      e.dataTransfer.setData('from', side);
+      e.dataTransfer.setData('idx', String(idx));
+      row.classList.add('dragging');
+    });
+    row.addEventListener('dragend', () => row.classList.remove('dragging'));
+    el.appendChild(row);
+  });
+  el.querySelectorAll('input').forEach(inp => {
+    inp.addEventListener('input', e => {
+      const s = e.target.dataset.side;
+      const i = parseInt(e.target.dataset.idx);
+      const arr = s === 'soll' ? pS : pH;
+      arr[i].amount = parseFloat(e.target.value) || 0;
+      updateSums();
+    });
+    // Prevent drag from input
+    inp.addEventListener('mousedown', e => e.stopPropagation());
+  });
+  el.querySelectorAll('.remove').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const s = e.currentTarget.dataset.side;
+      const i = parseInt(e.currentTarget.dataset.idx);
+      const arr = s === 'soll' ? pS : pH;
+      arr.splice(i, 1);
+      renderZones();
+      renderChips();
+    });
+  });
+}
+
+function updateSums() {
+  const sSum = pS.reduce((a, b) => a + (b.amount || 0), 0);
+  const hSum = pH.reduce((a, b) => a + (b.amount || 0), 0);
+  document.getElementById('zs-sum').textContent = '€ ' + sSum.toLocaleString('de-AT', {minimumFractionDigits: 2});
+  document.getElementById('zh-sum').textContent = '€ ' + hSum.toLocaleString('de-AT', {minimumFractionDigits: 2});
+  const balanced = Math.abs(sSum - hSum) < 0.01 && sSum > 0;
+  document.getElementById('zs-sum').style.color = balanced ? '#10b981' : '#023962';
+  document.getElementById('zh-sum').style.color = balanced ? '#10b981' : '#023962';
+}
+
+function setupDropZones() {
+  ['zs', 'zh'].forEach(id => {
+    const z = document.getElementById(id);
+    const targetSide = id === 'zs' ? 'soll' : 'haben';
+    z.addEventListener('dragover', e => { e.preventDefault(); z.classList.add('over'); });
+    z.addEventListener('dragleave', e => {
+      if (!z.contains(e.relatedTarget)) z.classList.remove('over');
+    });
+    z.addEventListener('drop', e => {
+      e.preventDefault();
+      z.classList.remove('over');
+      const k = e.dataTransfer.getData('k');
+      if (!k) return;
+      const from = e.dataTransfer.getData('from'); // '', 'soll', or 'haben'
+      if (from === 'soll' || from === 'haben') {
+        // Move between zones — preserve amount
+        if (from === targetSide) return; // dropped on same side, no-op
+        const sourceArr = from === 'soll' ? pS : pH;
+        const targetArr = targetSide === 'soll' ? pS : pH;
+        const idx = parseInt(e.dataTransfer.getData('idx'));
+        const entry = sourceArr[idx];
+        if (!entry) return;
+        sourceArr.splice(idx, 1);
+        targetArr.push(entry);
+        renderZones();
+        renderChips();
+      } else {
+        // Drop from chips — only allow if not already placed
+        if (isPlaced(k)) return;
+        const target = targetSide === 'soll' ? pS : pH;
+        target.push({ k: k, amount: 0 });
+        renderZones();
+        renderChips();
+      }
+    });
+  });
+}
+
+function check() {
+  const c = activeCases[cur];
+  const sKonten = pS.map(x => x.k).sort();
+  const hKonten = pH.map(x => x.k).sort();
+  const sExp = [...c.s].sort();
+  const hExp = [...c.h].sort();
+  const sKontenOK = arraysEq(sKonten, sExp);
+  const hKontenOK = arraysEq(hKonten, hExp);
+
+  let amountErrors = [];
+  if (sKontenOK) {
+    pS.forEach(entry => {
+      const expected = c.sa[entry.k];
+      if (Math.abs((entry.amount || 0) - expected) >= 0.01) {
+        amountErrors.push(`SOLL · ${entry.k} ${kontenrahmen[entry.k]}: € ${(entry.amount || 0).toFixed(2)} → richtig € ${expected.toFixed(2)}`);
+      }
+    });
+  }
+  if (hKontenOK) {
+    pH.forEach(entry => {
+      const expected = c.ha[entry.k];
+      if (Math.abs((entry.amount || 0) - expected) >= 0.01) {
+        amountErrors.push(`HABEN · ${entry.k} ${kontenrahmen[entry.k]}: € ${(entry.amount || 0).toFixed(2)} → richtig € ${expected.toFixed(2)}`);
+      }
+    });
+  }
+
+  const allCorrect = sKontenOK && hKontenOK && amountErrors.length === 0;
+  const fb = document.getElementById('fb');
+  
+  if (allCorrect) {
+    // Only count as "geschafft" if first attempt was correct AND not yet recorded
+    if (firstAttemptCorrect && !caseResults.some(r => r.id === c.id)) {
+      geschafft += 1;
+      strk += 1;
+      recordResult(c.id, true);
+      caseResults.push({ id: c.id, correct: true });
+    }
+    // If already failed once, we already recorded it as incorrect — don't record again
+    
+    fb.className = 'feedback correct';
+    let html = firstAttemptCorrect 
+      ? `<span class="head">✓ Geschafft!</span>Konten und Beträge stimmen.`
+      : `<span class="head">✓ Jetzt richtig!</span>Beim ersten Versuch noch nicht ganz — kommt nochmal in einer der nächsten Runden.`;
+    html += `<div class="explain">${c.e}</div>`;
+    if (c.es) html += `<div class="esels"><span class="h">🧠 Eselsbrücke</span>${c.es}</div>`;
+    if (c.pr) html += `<div class="praxis"><span class="h">🌍 Praxis-Bezug</span>${c.pr}</div>`;
+    fb.innerHTML = html;
+    const btn = document.getElementById('bc');
+    btn.textContent = cur === activeCases.length - 1 ? 'Auswertung →' : 'Nächster Geschäftsfall →';
+    btn.onclick = () => { cur++; render(); };
+  } else {
+    firstAttemptCorrect = false;
+    strk = 0;
+    fb.className = 'feedback wrong';
+    let html = '<span class="head">✗ Nicht ganz – schau dir die Lösung an</span>';
+    if (!sKontenOK || !hKontenOK) {
+      html += 'Die <b>Konten</b> stimmen noch nicht.';
+    } else if (amountErrors.length > 0) {
+      html += 'Konten passen ✓ – aber die <b>Beträge</b> stimmen nicht:';
+      html += '<ul class="errlist">' + amountErrors.map(e => `<li>${e}</li>`).join('') + '</ul>';
+    }
+    const cs = c.s.map(k => `${k} ${kontenrahmen[k]} → € ${c.sa[k].toLocaleString('de-AT', {minimumFractionDigits: 2})}`).join('<br>');
+    const ch = c.h.map(k => `${k} ${kontenrahmen[k]} → € ${c.ha[k].toLocaleString('de-AT', {minimumFractionDigits: 2})}`).join('<br>');
+    html += `<div class="solution"><b>SOLL:</b><br>${cs}<br><br><b>an HABEN:</b><br>${ch}</div>`;
+    html += `<div class="explain">${c.e}</div>`;
+    if (c.es) html += `<div class="esels"><span class="h">🧠 Eselsbrücke</span>${c.es}</div>`;
+    if (c.pr) html += `<div class="praxis"><span class="h">🌍 Praxis-Bezug</span>${c.pr}</div>`;
+    fb.innerHTML = html;
+    // Record as incorrect (only count the first time the case is shown)
+    if (!caseResults.some(r => r.id === c.id)) {
+      recordResult(c.id, false);
+      caseResults.push({ id: c.id, correct: false });
+    }
+    // Change "Prüfen" button into "Nächster Fall" - so Aleks can move on
+    const btn = document.getElementById('bc');
+    btn.textContent = cur === activeCases.length - 1 ? 'Auswertung →' : 'Nächster Fall →';
+    btn.onclick = () => { cur++; render(); };
+    // Reset button becomes "Nochmal versuchen" — re-attempt this case
+    const rbtn = document.getElementById('br');
+    rbtn.textContent = 'Nochmal versuchen';
+    rbtn.onclick = () => {
+      // re-render same case but keep firstAttemptCorrect = false (already wrong)
+      pS = []; pH = [];
+      renderZones();
+      renderChips();
+      document.getElementById('fb').innerHTML = '';
+      document.getElementById('fb').className = 'feedback';
+      // Restore button states
+      const checkBtn = document.getElementById('bc');
+      checkBtn.textContent = 'Prüfen';
+      checkBtn.onclick = check;
+      const resetBtn = document.getElementById('br');
+      resetBtn.textContent = 'Zurücksetzen';
+      resetBtn.onclick = render;
+    };
+  }
+  document.getElementById('sp').textContent = geschafft;
+  document.getElementById('ss').textContent = strk;
+}
+
+function arraysEq(a, b) {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+  return true;
+}
+
+function done() {
+  document.getElementById('pf').style.width = '100%';
+  document.getElementById('sc').textContent = activeCases.length;
+  const total = activeCases.length;
+  const pct = total > 0 ? Math.round(geschafft / total * 100) : 0;
+  const level = levels[selectedLevel];
+  let msg = "Top Leistung! 🎯";
+  if (pct < 50) msg = selectedLevel === 'blitzkneisser' ? "Brutal aber lehrreich. Nochmal!" : "Übung macht den Meister – nochmal!";
+  else if (pct < 80) msg = "Schon richtig gut!";
+  else if (pct >= 90 && selectedLevel === 'blitzkneisser') msg = "Du bist ein wahrer Bilanz-Boss! 👑";
+  
+  // Status summary across ALL cases (not just this run)
+  const counts = getStatusCounts(allCases);
+  const statusHtml = Object.entries(statusInfo).map(([k,s]) => `
+    <div class="status-card" style="border-left-color:${s.color}">
+      <span class="ic">${s.icon}</span>
+      <span class="nm">${s.name}</span>
+      <span class="vl">${counts[k]}</span>
+    </div>
+  `).join('');
+  
+  document.getElementById('qc').innerHTML = `
+    <div class="card complete">
+      <div class="level-badge" style="background:${level.color}20;color:${level.color}">${level.icon} ${level.name} abgeschlossen</div>
+      <h2>Geschafft, Aleks!</h2>
+      <div class="final">${geschafft} / ${total}</div>
+      <p style="font-size:16px;color:#023962;font-weight:600">${msg} (${pct}%)</p>
+      <p>Beste Streak in dieser Runde: <b>${strk} 🔥</b></p>
+      
+      <div style="margin-top:24px;text-align:left">
+        <div style="font-size:11px;color:#028BF2;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;font-weight:700;text-align:center;margin-bottom:8px">Gesamtfortschritt</div>
+        <div class="status-summary">${statusHtml}</div>
+      </div>
+      
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:24px;flex-wrap:wrap">
+        <button class="btn btn-secondary" onclick="renderIntro()">← Einstellungen ändern</button>
+        <button class="btn btn-primary" onclick="startQuiz()">Nochmal mit gleichen Einstellungen</button>
+      </div>
+    </div>
+  `;
+}
+
+renderIntro();
+</script>
+</body>
+</html>

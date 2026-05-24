@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workshop: Aleks goes Live 🚀</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230066FF'/%3E%3Ctext x='50' y='68' font-family='Inter,sans-serif' font-size='56' font-weight='800' fill='white' text-anchor='middle'%3E🚀%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#fafafa;--bg-card:#fff;--text:#0a0a0a;--text-2:#525252;--text-3:#a3a3a3;
+    --line:#e5e5e5;--accent:#0066FF;--accent-soft:rgba(0,102,255,.08);
+    --green:#10B981;--green-soft:rgba(16,185,129,.1);
+    --yellow:#F59E0B;--red:#EF4444;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --sans:'Inter',-apple-system,sans-serif;
+  }
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:60px}
+  
+  /* Sticky progress header */
+  .progress-bar-container{
+    position:sticky;top:0;z-index:100;
+    backdrop-filter:blur(20px) saturate(180%);
+    background:rgba(250,250,250,.92);
+    border-bottom:1px solid var(--line);
+    padding:14px 0;
+  }
+  .progress-inner{
+    max-width:960px;margin:0 auto;padding:0 24px;
+    display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  }
+  .progress-emoji{font-size:28px}
+  .progress-text{flex:1;min-width:200px}
+  .progress-text h1{font-size:16px;font-weight:700;letter-spacing:-.01em}
+  .progress-text .stats{font-family:var(--mono);font-size:11px;color:var(--text-2);margin-top:2px}
+  .progress-text .stats strong{color:var(--accent);font-weight:600}
+  .progress-bar-wrap{
+    flex:2;min-width:200px;
+    height:8px;background:var(--line);border-radius:4px;overflow:hidden;
+    position:relative;
+  }
+  .progress-bar-fill{
+    height:100%;background:linear-gradient(90deg,var(--accent),var(--green));
+    border-radius:4px;width:0%;
+    transition:width .6s cubic-bezier(.4,0,.2,1);
+  }
+  .progress-pct{
+    font-family:var(--mono);font-size:14px;font-weight:700;
+    color:var(--accent);min-width:54px;text-align:right;
+    transition:color .3s;
+  }
+  .progress-pct.done{color:var(--green)}
+  .reset-btn{
+    background:none;border:1px solid var(--line);color:var(--text-3);
+    font-size:11px;padding:6px 10px;border-radius:6px;cursor:pointer;
+    font-family:inherit;transition:all .15s;
+  }
+  .reset-btn:hover{border-color:var(--red);color:var(--red)}
+  
+  /* Container */
+  main{max-width:960px;margin:0 auto;padding:32px 24px}
+  
+  /* Hero */
+  .hero{
+    text-align:center;padding:24px 0 32px;
+    border-bottom:1px solid var(--line);margin-bottom:32px;
+  }
+  .hero h1{
+    font-size:clamp(28px,4vw,42px);font-weight:800;letter-spacing:-.03em;
+    margin-bottom:8px;line-height:1.15;
+  }
+  .hero p{color:var(--text-2);font-size:15px;max-width:560px;margin:0 auto}
+  .hero-meta{
+    display:flex;justify-content:center;gap:24px;
+    font-family:var(--mono);font-size:11px;color:var(--text-3);
+    margin-top:16px;flex-wrap:wrap;
+  }
+  .hero-meta span{display:inline-flex;align-items:center;gap:6px}
+  .hero-meta span::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--text-3)}
+  .hero-meta span:first-child::before{display:none}
+  
+  /* Phase cards */
+  .phase{
+    background:var(--bg-card);border:1px solid var(--line);
+    border-radius:14px;margin-bottom:20px;overflow:hidden;
+    transition:border-color .2s;
+  }
+  .phase.complete{border-color:var(--green);background:linear-gradient(135deg,#fff,rgba(16,185,129,.02))}
+  
+  .phase-header{
+    padding:18px 24px;cursor:pointer;
+    display:flex;align-items:center;gap:16px;
+    user-select:none;transition:background .15s;
+    border-bottom:1px solid transparent;
+  }
+  .phase-header:hover{background:var(--accent-soft)}
+  .phase.complete .phase-header{background:var(--green-soft)}
+  
+  .phase-icon{
+    font-size:24px;width:40px;height:40px;
+    background:var(--accent-soft);border-radius:10px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    transition:all .2s;
+  }
+  .phase.complete .phase-icon{background:var(--green);color:white}
+  .phase.complete .phase-icon::before{content:'✓';font-size:20px;font-weight:700}
+  .phase.complete .phase-icon .emoji{display:none}
+  
+  .phase-title-wrap{flex:1;min-width:0}
+  .phase-title{font-size:17px;font-weight:700;letter-spacing:-.01em;margin-bottom:2px}
+  .phase-meta{font-family:var(--mono);font-size:11px;color:var(--text-3)}
+  .phase-meta .count{color:var(--accent);font-weight:600}
+  .phase.complete .phase-meta .count{color:var(--green)}
+  
+  .phase-toggle{
+    color:var(--text-3);font-size:18px;
+    transition:transform .25s;
+  }
+  .phase.open .phase-toggle{transform:rotate(90deg)}
+  
+  .phase-body{
+    max-height:0;overflow:hidden;
+    transition:max-height .4s ease-out;
+  }
+  .phase.open .phase-body{max-height:5000px}
+  .phase-body-inner{padding:8px 24px 24px}
+  
+  /* Tasks */
+  .task{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:10px 12px;border-radius:8px;
+    transition:background .15s;cursor:pointer;
+    margin-bottom:2px;
+  }
+  .task:hover{background:var(--accent-soft)}
+  .task.done{opacity:.6}
+  .task.done .task-title{text-decoration:line-through;color:var(--text-2)}
+  
+  .task input[type="checkbox"]{
+    width:18px;height:18px;cursor:pointer;
+    accent-color:var(--accent);flex-shrink:0;
+    margin-top:3px;
+  }
+  
+  .task-content{flex:1;min-width:0}
+  .task-title{font-size:14px;font-weight:500;line-height:1.5}
+  .task-desc{font-size:12.5px;color:var(--text-2);line-height:1.55;margin-top:3px}
+  
+  /* Code blocks inside tasks */
+  .task code, .task pre{
+    font-family:var(--mono);font-size:11.5px;
+    background:#f5f5f5;border:1px solid var(--line);
+    border-radius:6px;padding:2px 6px;color:#0a0a0a;
+  }
+  .task pre{
+    display:block;padding:10px 12px;margin:6px 0;
+    overflow-x:auto;line-height:1.55;
+    white-space:pre;
+  }
+  
+  /* Hints / callouts */
+  .hint{
+    background:#fefce8;border-left:3px solid #eab308;
+    padding:10px 14px;border-radius:6px;margin:8px 0;
+    font-size:12.5px;line-height:1.55;color:#713f12;
+  }
+  .hint strong{color:#854d0e}
+  .hint-icon{font-weight:700;margin-right:4px}
+  
+  .tip{
+    background:var(--accent-soft);border-left:3px solid var(--accent);
+    padding:10px 14px;border-radius:6px;margin:8px 0;
+    font-size:12.5px;line-height:1.55;color:#003D99;
+  }
+  .tip strong{color:var(--accent)}
+  
+  .warn{
+    background:#fef2f2;border-left:3px solid var(--red);
+    padding:10px 14px;border-radius:6px;margin:8px 0;
+    font-size:12.5px;line-height:1.55;color:#7f1d1d;
+  }
+  
+  /* Section divider in body */
+  .section-label{
+    font-family:var(--mono);font-size:10px;font-weight:600;
+    color:var(--accent);text-transform:uppercase;letter-spacing:.1em;
+    margin:18px 0 8px;display:flex;align-items:center;gap:8px;
+  }
+  .section-label::before, .section-label::after{
+    content:'';flex:1;height:1px;background:var(--line);
+  }
+  
+  /* Celebration */
+  @keyframes confetti{
+    0%{transform:translateY(-100vh) rotate(0deg);opacity:1}
+    100%{transform:translateY(100vh) rotate(720deg);opacity:0}
+  }
+  .confetti{
+    position:fixed;top:-20px;width:10px;height:10px;
+    pointer-events:none;z-index:9999;
+    animation:confetti 3s linear forwards;
+  }
+  
+  .celebration{
+    position:fixed;bottom:24px;right:24px;
+    background:linear-gradient(135deg,var(--green),#059669);
+    color:white;padding:14px 20px;border-radius:12px;
+    box-shadow:0 10px 30px rgba(16,185,129,.4);
+    font-weight:600;font-size:14px;
+    transform:translateY(120px);
+    transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+    z-index:1000;
+  }
+  .celebration.show{transform:translateY(0)}
+  
+  /* Final card */
+  .final-card{
+    background:linear-gradient(135deg,#000,#171717);
+    color:white;border-radius:16px;padding:32px;
+    margin-top:32px;text-align:center;
+    position:relative;overflow:hidden;
+  }
+  .final-card::before{
+    content:'';position:absolute;top:-50%;right:-20%;
+    width:400px;height:400px;
+    background:radial-gradient(circle,rgba(0,102,255,.3),transparent 60%);
+  }
+  .final-card h2{
+    font-size:24px;font-weight:700;letter-spacing:-.02em;
+    margin-bottom:8px;position:relative;
+  }
+  .final-card p{color:#a3a3a3;font-size:14px;position:relative}
+  .final-card .stats-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:16px;margin-top:24px;position:relative;
+  }
+  .final-stat .v{
+    font-family:var(--mono);font-size:24px;font-weight:700;
+    color:var(--green);display:block;
+  }
+  .final-stat .k{
+    font-size:11px;color:#737373;text-transform:uppercase;
+    letter-spacing:.1em;margin-top:2px;
+  }
+  
+  /* Mobile adjustments */
+  @media (max-width:640px){
+    .progress-inner{padding:0 16px}
+    main{padding:20px 16px}
+    .phase-header{padding:14px 16px;gap:12px}
+    .phase-body-inner{padding:8px 16px 18px}
+    .progress-text h1{font-size:14px}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar-container">
+  <div class="progress-inner">
+    <span class="progress-emoji">🚀</span>
+    <div class="progress-text">
+      <h1>Workshop: Aleks goes Live</h1>
+      <div class="stats"><strong id="doneCount">0</strong> / <span id="totalCount">0</span> Aufgaben erledigt</div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+    <div class="progress-pct" id="progressPct">0%</div>
+    <button class="reset-btn" onclick="resetAll()">Reset</button>
+  </div>
+</div>
+
+<main>
+
+  <div class="hero">
+    <h1>Aleks goes Live 🚀</h1>
+    <p>In 90 Minuten von „lokales HTML" zu „eigene Website unter eigener Domain". Hak's einfach ab — der Fortschritt wird automatisch gespeichert.</p>
+    <div class="hero-meta">
+      <span>90 Min</span>
+      <span>5 Phasen</span>
+      <span>Vater &amp; Sohn</span>
+    </div>
+  </div>
+
+  <!-- ======================== PHASE 0 ======================== -->
+  <div class="phase open" data-phase="0">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-icon"><span class="emoji">📋</span></div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Vor dem Workshop · Vorbereitung</div>
+        <div class="phase-meta">Papa-Aufgaben · <span class="count">0/6</span> erledigt</div>
+      </div>
+      <div class="phase-toggle">›</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-body-inner">
+
+        <label class="task">
+          <input type="checkbox" data-task="0-1">
+          <div class="task-content">
+            <div class="task-title">Aleks' Foto bereitlegen</div>
+            <div class="task-desc">Quadratisch zuschneiden, mind. 500×500px. Als <code>aleks.jpg</code> auf Desktop.</div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="0-2">
+          <div class="task-content">
+            <div class="task-title">ZIP entpacken</div>
+            <div class="task-desc"><code>aleks-site.zip</code> auf Desktop entpacken — Ergebnis: Ordner <code>aleks-site/</code></div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="0-3">
+          <div class="task-content">
+            <div class="task-title">Domain kaufen</div>
+            <div class="task-desc">Empfehlung: <code>aleks-bechter.com</code> über Cloudflare Registrar (~10€/Jahr) oder <code>.at</code> über World4You</div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="0-4">
+          <div class="task-content">
+            <div class="task-title">GitHub-Account für Aleks bereit</div>
+            <div class="task-desc">Sein eigener Account — Username sollte er gut wählen, der bleibt!</div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="0-5">
+          <div class="task-content">
+            <div class="task-title">Anthropic-Login bereit</div>
+            <div class="task-desc">Für Claude Code in Phase 4</div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="0-6">
+          <div class="task-content">
+            <div class="task-title">Setting für Konzentration</div>
+            <div class="task-desc">Zwei Stühle, Wasser, Snacks. Aleks' Handy weg, kein Discord. 90 Min sind lang.</div>
+          </div>
+        </label>
+
+        <div class="tip">
+          <strong>Wichtig:</strong> Aleks tippt selbst — auch wenn's langsam geht. Wer tippt, lernt. Du erklärst und reflektierst.
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== PHASE 1 ======================== -->
+  <div class="phase" data-phase="1">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-icon"><span class="emoji">⚙️</span></div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Phase 1 · Setup (25 Min)</div>
+        <div class="phase-meta">Terminal, Node, Claude Code, GitHub, Foto · <span class="count">0/9</span> erledigt</div>
+      </div>
+      <div class="phase-toggle">›</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-body-inner">
+
+        <div class="section-label">1.1 · Terminal öffnen</div>
+
+        <label class="task">
+          <input type="checkbox" data-task="1-1">
+          <div class="task-content">
+            <div class="task-title">Terminal öffnen und ein bisschen rumprobieren</div>
+            <div class="task-desc">
+              <code>Cmd + Leertaste</code> → "Terminal" tippen → Enter. Dann probieren:
+              <pre>pwd     # wo bin ich?
+ls      # was liegt hier?
+cd Desktop
+ls      # jetzt am Desktop</pre>
+              <div class="tip"><strong>Sag Aleks:</strong> „Das ist wie ein Chat mit dem Computer — du sagst ihm in Worten was er machen soll, statt zu klicken."</div>
+            </div>
+          </div>
+        </label>
+
+        <div class="section-label">1.2 · Node.js installieren</div>
+
+        <label class="task">
+          <input type="checkbox" data-task="1-2">
+          <div class="task-content">
+            <div class="task-title">Node.js prüfen oder installieren</div>
+            <div class="task-desc">
+              Prüfen: <code>node --version</code><br>
+              Wenn "command not found": Download von <a href="https://nodejs.org" target="_blank">nodejs.org</a> (LTS-Version) → Installer ausführen → Terminal NEU öffnen.
+            </div>
+          </div>
+        </label>
+
+        <div class="section-label">1.3 · Claude Code installieren</div>
+
+        <label class="task">
+          <input type="checkbox" data-task="1-3">
+          <div class="task-content">
+            <div class="task-title">Claude Code installieren</div>
+            <div class="task-desc">
+              <pre>npm install -g @anthropic-ai/claude-code</pre>
+              <div class="hint"><strong>Wenn "Permission denied":</strong> <code>sudo npm install -g @anthropic-ai/claude-code</code> — Mac-Passwort eingeben (man sieht beim Tippen nichts, ist normal!)</div>
+              Test: <code>claude --version</code>
+            </div>
+          </div>
+        </label>
+
+        <div class="section-label">1.4 · GitHub & Git</div>
+
+        <label class="task">
+          <input type="checkbox" data-task="1-4">
+          <div class="task-content">
+            <div class="task-title">GitHub-Account einrichten</div>
+            <div class="task-desc">
+              Auf <a href="https://github.com" target="_blank">github.com</a> registrieren falls nötig. Username weise wählen (z.B. <code>aleks-bechter</code>) — das bleibt fürs Leben!
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="1-5">
+          <div class="task-content">
+            <div class="task-title">Git konfigurieren</div>
+            <div class="task-desc">
+              <pre>git config --global user.name "Aleksander Bechter"
+git config --global user.email "aleksander.bechter@gmail.com"</pre>
+              <div class="tip"><strong>Sag Aleks:</strong> „Git ist wie eine Zeitmaschine für deinen Code. Jede Änderung wird gespeichert."</div>
+            </div>
+          </div>
+        </label>
+
+        <div class="section-label">1.5 · Projekt-Ordner</div>
+
+        <label class="task">
+          <input type="checkbox" data-task="1-6">
+          <div class="task-content">
+            <div class="task-title">In den Projekt-Ordner wechseln</div>
+            <div class="task-desc">
+              <pre>cd ~/Desktop/aleks-site
+ls</pre>
+              Du solltest sehen: <code>index.html</code>, <code>apps/</code>, <code>README.md</code>
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="1-7">
+          <div class="task-content">
+            <div class="task-title">Foto in den Ordner kopieren</div>
+            <div class="task-desc">
+              <pre>cp ~/Downloads/aleks.jpg .</pre>
+              Oder per Finder Drag &amp; Drop. Danach: <code>ls</code> → <code>aleks.jpg</code> ist drin.
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="1-8">
+          <div class="task-content">
+            <div class="task-title">index.html mit Foto verknüpfen</div>
+            <div class="task-desc">
+              <pre>open -a TextEdit index.html</pre>
+              Suche nach: <code>&lt;div class="hero-photo-placeholder"&gt;AB&lt;/div&gt;</code><br>
+              Ersetze mit: <code>&lt;img src="aleks.jpg" alt="Aleksander Bechter"&gt;</code><br>
+              Speichern (Cmd+S).
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="1-9">
+          <div class="task-content">
+            <div class="task-title">🎉 Erste Erfolg — index.html im Browser öffnen</div>
+            <div class="task-desc">
+              Doppelklick auf <code>index.html</code> im Finder. Aleks sieht <strong>sein Foto auf seiner Seite</strong>.
+              <div class="tip"><strong>Pause-Moment!</strong> Lass ihn das genießen. 5 Minuten Pause vor Phase 2.</div>
+            </div>
+          </div>
+        </label>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== PHASE 2 ======================== -->
+  <div class="phase" data-phase="2">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-icon"><span class="emoji">📦</span></div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Phase 2 · Git &amp; GitHub (15 Min)</div>
+        <div class="phase-meta">Repository, Commits, Push · <span class="count">0/7</span> erledigt</div>
+      </div>
+      <div class="phase-toggle">›</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-body-inner">
+
+        <div class="section-label">2.1 · Repository initialisieren</div>
+
+        <label class="task">
+          <input type="checkbox" data-task="2-1">
+          <div class="task-content">
+            <div class="task-title">Git im Projekt aktivieren</div>
+            <div class="task-desc">
+              <pre>cd ~/Desktop/aleks-site
+git init</pre>
+              <div class="tip"><strong>Sag Aleks:</strong> „Git beobachtet jetzt diesen Ordner. Jede Änderung wird mitgeschrieben."</div>
+            </div>
+          </div>
+        </label>
+
+        <div class="section-label">2.2 · Erster Commit</div>
+
+        <label class="task">
+          <input type="checkbox" data-task="2-2">
+          <div class="task-content">
+            <div class="task-title">Alles zu Git hinzufügen</div>
+            <div class="task-desc">
+              <pre>git status     # zeigt rote (= ungesicherte) Dateien
+git add .       # alles hinzufügen
+git status     # jetzt grün — bereit zum Commit</pre>
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="2-3">
+          <div class="task-content">
+            <div class="task-title">Ersten Commit machen</div>
+            <div class="task-desc">
+              <pre>git commit -m "Erste Version meiner Website mit Buchungssätze-Quiz"</pre>
+              <div class="tip"><strong>Wichtig:</strong> Commit-Message ist eine Notiz an dich selbst in 6 Monaten — schreib immer was Sinnvolles.</div>
+            </div>
+          </div>
+        </label>
+
+        <div class="section-label">2.3 · GitHub-Repository</div>
+
+        <label class="task">
+          <input type="checkbox" data-task="2-4">
+          <div class="task-content">
+            <div class="task-title">Repo auf GitHub erstellen</div>
+            <div class="task-desc">
+              <a href="https://github.com/new" target="_blank">github.com/new</a> öffnen:
+              <ul style="margin:6px 0 6px 18px;font-size:12.5px">
+                <li>Name: <code>aleks-bechter-website</code></li>
+                <li>Public ✓ (wichtig für gratis Hosting!)</li>
+                <li>"Add a README" NICHT anhaken</li>
+                <li>Create repository</li>
+              </ul>
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="2-5">
+          <div class="task-content">
+            <div class="task-title">Personal Access Token erstellen</div>
+            <div class="task-desc">
+              GitHub fragt beim Push nach Login — das normale Passwort funktioniert nicht mehr. Brauchen einen Token:
+              <ol style="margin:6px 0 6px 18px;font-size:12.5px">
+                <li>GitHub → Settings → Developer Settings → Personal Access Tokens → Tokens (classic)</li>
+                <li>Generate new token (classic)</li>
+                <li>Note: "Mac Terminal"</li>
+                <li>Expiration: No expiration</li>
+                <li>Scopes: ✓ <code>repo</code></li>
+                <li>Token kopieren und sicher speichern!</li>
+              </ol>
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="2-6">
+          <div class="task-content">
+            <div class="task-title">Code zu GitHub pushen</div>
+            <div class="task-desc">
+              Die GitHub-Seite zeigt die Befehle — Username einfügen:
+              <pre>git remote add origin https://github.com/USERNAME/aleks-bechter-website.git
+git branch -M main
+git push -u origin main</pre>
+              Bei Login: Username = GitHub-Name, Password = Personal Access Token (aus 2.5).
+              <div class="tip"><strong>🎉 Aha-Moment:</strong> Auf <code>github.com</code> sieht Aleks jetzt seine Dateien online!</div>
+            </div>
+          </div>
+        </label>
+
+        <div class="section-label">2.4 · Erste echte Änderung</div>
+
+        <label class="task">
+          <input type="checkbox" data-task="2-7">
+          <div class="task-content">
+            <div class="task-title">Etwas Kleines ändern und pushen</div>
+            <div class="task-desc">
+              Z.B. Tagline in <code>index.html</code> anpassen. Dann:
+              <pre>git status      # zeigt geänderte Datei
+git diff       # zeigt was geändert wurde (rot=weg, grün=neu)
+git add .
+git commit -m "Tagline angepasst"
+git push</pre>
+              Auf GitHub sieht Aleks: <strong>seine Änderung ist live</strong>, der Commit in der Historie.
+            </div>
+          </div>
+        </label>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== PHASE 3 ======================== -->
+  <div class="phase" data-phase="3">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-icon"><span class="emoji">🔥</span></div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Phase 3 · Deployment (25 Min)</div>
+        <div class="phase-meta">Firebase Hosting, Live-URL, eigene Domain · <span class="count">0/6</span> erledigt</div>
+      </div>
+      <div class="phase-toggle">›</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-body-inner">
+
+        <label class="task">
+          <input type="checkbox" data-task="3-1">
+          <div class="task-content">
+            <div class="task-title">Firebase CLI installieren</div>
+            <div class="task-desc">
+              <pre>npm install -g firebase-tools
+firebase login</pre>
+              Browser öffnet sich → mit Google-Account einloggen.
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="3-2">
+          <div class="task-content">
+            <div class="task-title">Firebase-Projekt erstellen</div>
+            <div class="task-desc">
+              Auf <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a>:
+              <ul style="margin:6px 0 6px 18px;font-size:12.5px">
+                <li>Add project</li>
+                <li>Name: <code>aleks-bechter</code></li>
+                <li>Google Analytics: deaktivieren</li>
+                <li>Create</li>
+              </ul>
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="3-3">
+          <div class="task-content">
+            <div class="task-title">Hosting initialisieren</div>
+            <div class="task-desc">
+              <pre>firebase init hosting</pre>
+              <strong>Wichtige Antworten beim Wizard:</strong>
+              <ul style="margin:6px 0 6px 18px;font-size:12.5px">
+                <li>"Use an existing project" → aleks-bechter</li>
+                <li>Public directory: <code>.</code> (Punkt!)</li>
+                <li>Single-page app? <strong>No</strong></li>
+                <li>Automatic builds GitHub? <strong>Yes</strong></li>
+                <li>Repo: USERNAME/aleks-bechter-website</li>
+                <li>Build script? <strong>No</strong></li>
+                <li>Deploy on merge to main? <strong>Yes</strong></li>
+                <li>Branch: <code>main</code></li>
+                <li><strong>Overwrite index.html?</strong> <span style="color:var(--red)">NO!</span></li>
+              </ul>
+              <div class="warn"><strong>Achtung:</strong> Wenn er "Yes" zum Überschreiben sagt, ist deine ganze Site weg!</div>
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="3-4">
+          <div class="task-content">
+            <div class="task-title">🎉 Erstes Deployment!</div>
+            <div class="task-desc">
+              <pre>firebase deploy --only hosting</pre>
+              Nach 30 Sek: <strong>Hosting URL</strong>: <code>https://aleks-bechter.web.app</code><br>
+              <div class="tip"><strong>Großer Moment:</strong> Aleks öffnet die URL → seine Website ist LIVE im Internet. Frag ihn: „Wem schickst du den Link zuerst?"</div>
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="3-5">
+          <div class="task-content">
+            <div class="task-title">Custom Domain in Firebase eintragen</div>
+            <div class="task-desc">
+              Firebase Console → Hosting → "Add custom domain" → <code>aleks-bechter.com</code><br>
+              Firebase zeigt 2 DNS A-Records.
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="3-6">
+          <div class="task-content">
+            <div class="task-title">DNS bei Domain-Provider eintragen</div>
+            <div class="task-desc">
+              Bei Cloudflare (oder wo Domain liegt): DNS-Settings → A-Records hinzufügen (beide IPs von Firebase).
+              <div class="hint"><strong>⏱ Wartezeit:</strong> 15-30 Min bis SSL-Zertifikat aktiv. In der Zeit gehen wir Phase 4 an.</div>
+            </div>
+          </div>
+        </label>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== PHASE 4 ======================== -->
+  <div class="phase" data-phase="4">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-icon"><span class="emoji">🤖</span></div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Phase 4 · Claude Code in Aktion (20 Min)</div>
+        <div class="phase-meta">AI-Pair-Programming, eine echte Idee umsetzen · <span class="count">0/5</span> erledigt</div>
+      </div>
+      <div class="phase-toggle">›</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-body-inner">
+
+        <label class="task">
+          <input type="checkbox" data-task="4-1">
+          <div class="task-content">
+            <div class="task-title">Claude Code starten</div>
+            <div class="task-desc">
+              <pre>cd ~/Desktop/aleks-site
+claude</pre>
+              Beim ersten Mal: Login mit Anthropic-Account.
+              <div class="tip"><strong>Sag Aleks:</strong> „Claude sieht jetzt alle deine Dateien. Du kannst ihn fragen was du willst — er macht's direkt, du musst nichts kopieren."</div>
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="4-2">
+          <div class="task-content">
+            <div class="task-title">Aleks' eigene Idee umsetzen</div>
+            <div class="task-desc">
+              <strong>Aleks beschreibt was er möchte.</strong> Ideen falls er keine hat:
+              <ul style="margin:6px 0 6px 18px;font-size:12.5px">
+                <li>"Bau einen Dark Mode Toggle in die index.html"</li>
+                <li>"Füge eine Sektion mit meinen Lieblingsbüchern hinzu"</li>
+                <li>"Beim Hover über die App-Karten soll mehr passieren"</li>
+                <li>"Erstelle eine Sub-Seite für Le Savon (Junior Company)"</li>
+              </ul>
+              <div class="warn"><strong>Wichtig:</strong> Aleks soll Claudes Vorschläge prüfen bevor er "Yes" sagt — nicht alles blind durchwinken.</div>
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="4-3">
+          <div class="task-content">
+            <div class="task-title">Im Browser testen</div>
+            <div class="task-desc">
+              <code>index.html</code> per Doppelklick → Feature ausprobieren.<br>
+              <strong>Funktioniert nicht?</strong> Aleks sagt Claude was kaputt ist → Claude fixt. <strong>Das ist die Magie</strong> — iterativ mit AI arbeiten.
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="4-4">
+          <div class="task-content">
+            <div class="task-title">Commit &amp; Push via Claude Code</div>
+            <div class="task-desc">
+              Im Claude Code-Chat:
+              <pre>Commit das mit message "Dark Mode hinzugefügt" 
+und push zu GitHub</pre>
+              Claude macht's. GitHub Action deployed automatisch zu Firebase!
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="4-5">
+          <div class="task-content">
+            <div class="task-title">🚀 Live-Site refreshen — Magie!</div>
+            <div class="task-desc">
+              Nach 1-2 Min: Live-URL refreshen → Aleks' Änderung ist im Internet.
+              <div class="tip"><strong>Krönender Moment:</strong> „Du hast einen kompletten Software-Entwickler-Workflow durchlaufen: Idee → Code → Test → Commit → Deploy. Das machen Profis bei Google jeden Tag."</div>
+            </div>
+          </div>
+        </label>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== PHASE 5 ======================== -->
+  <div class="phase" data-phase="5">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <div class="phase-icon"><span class="emoji">🎓</span></div>
+      <div class="phase-title-wrap">
+        <div class="phase-title">Phase 5 · Abschluss (5 Min)</div>
+        <div class="phase-meta">Custom Domain prüfen, Reflexion · <span class="count">0/3</span> erledigt</div>
+      </div>
+      <div class="phase-toggle">›</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-body-inner">
+
+        <label class="task">
+          <input type="checkbox" data-task="5-1">
+          <div class="task-content">
+            <div class="task-title">Custom Domain testen</div>
+            <div class="task-desc">
+              <code>aleks-bechter.com</code> aufrufen → sollte mit SSL (https) funktionieren.
+              <div class="hint">Falls nicht: Geduld. Manchmal 60 Min. Definitiv heute fertig.</div>
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="5-2">
+          <div class="task-content">
+            <div class="task-title">Reflexion mit Aleks</div>
+            <div class="task-desc">
+              Frag ihn:
+              <ul style="margin:6px 0 6px 18px;font-size:12.5px">
+                <li>Was hast du heute gelernt?</li>
+                <li>Was war schwierig?</li>
+                <li>Was würdest du als Nächstes machen?</li>
+              </ul>
+              Sag ihm: „Du hast in 90 Minuten mehr gelernt als viele in einem Informatik-Schuljahr."
+            </div>
+          </div>
+        </label>
+
+        <label class="task">
+          <input type="checkbox" data-task="5-3">
+          <div class="task-content">
+            <div class="task-title">3 Ideen für die nächste Session</div>
+            <div class="task-desc">
+              Mit Aleks notieren — z.B. neue App, Blog-Sektion, Praktikum-Bewerbungstool. So bleibt die Motivation.
+            </div>
+          </div>
+        </label>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Final card when done -->
+  <div class="final-card" id="finalCard" style="display:none">
+    <h2>🎉 Geschafft, Aleks ist live!</h2>
+    <p>Aleksander Bechter ist jetzt offiziell ein Builder mit eigener Website unter eigener Domain.</p>
+    <div class="stats-grid">
+      <div class="final-stat">
+        <span class="v">36</span>
+        <span class="k">Tasks erledigt</span>
+      </div>
+      <div class="final-stat">
+        <span class="v">~90</span>
+        <span class="k">Minuten</span>
+      </div>
+      <div class="final-stat">
+        <span class="v">1</span>
+        <span class="k">Live Website</span>
+      </div>
+      <div class="final-stat">
+        <span class="v">∞</span>
+        <span class="k">Möglichkeiten</span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="celebration" id="celebration">
+  <span id="celebrationText">Erste Aufgabe geschafft! 🎉</span>
+</div>
+
+<script>
+const STORAGE_KEY = 'aleks_workshop_progress_v1';
+
+// State
+let state = loadState();
+
+function loadState() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  } catch { return {}; }
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
+}
+
+// Initialize
+function init() {
+  // Count totals
+  const allBoxes = document.querySelectorAll('input[type="checkbox"]');
+  document.getElementById('totalCount').textContent = allBoxes.length;
+  
+  // Restore state and attach handlers
+  allBoxes.forEach(box => {
+    const id = box.dataset.task;
+    if (state[id]) {
+      box.checked = true;
+      box.closest('.task').classList.add('done');
+    }
+    box.addEventListener('change', () => onTaskChange(box));
+  });
+  
+  updateProgress();
+}
+
+function onTaskChange(box) {
+  const id = box.dataset.task;
+  state[id] = box.checked;
+  saveState();
+  
+  box.closest('.task').classList.toggle('done', box.checked);
+  
+  if (box.checked) {
+    showCelebration();
+    fireConfetti();
+  }
+  
+  updateProgress();
+}
+
+function updateProgress() {
+  const all = document.querySelectorAll('input[type="checkbox"]');
+  const done = document.querySelectorAll('input[type="checkbox"]:checked');
+  const pct = all.length > 0 ? (done.length / all.length) * 100 : 0;
+  
+  document.getElementById('doneCount').textContent = done.length;
+  document.getElementById('progressBar').style.width = pct + '%';
+  const pctEl = document.getElementById('progressPct');
+  pctEl.textContent = Math.round(pct) + '%';
+  pctEl.classList.toggle('done', pct === 100);
+  
+  // Update phase counters
+  document.querySelectorAll('.phase').forEach(phase => {
+    const boxes = phase.querySelectorAll('input[type="checkbox"]');
+    const checked = phase.querySelectorAll('input[type="checkbox"]:checked');
+    const count = phase.querySelector('.count');
+    if (count) count.textContent = `${checked.length}/${boxes.length}`;
+    phase.classList.toggle('complete', boxes.length > 0 && checked.length === boxes.length);
+  });
+  
+  // Show final card if all done
+  const finalCard = document.getElementById('finalCard');
+  if (done.length === all.length && all.length > 0) {
+    finalCard.style.display = 'block';
+    fireConfetti(50);
+  } else {
+    finalCard.style.display = 'none';
+  }
+}
+
+function togglePhase(header) {
+  const phase = header.closest('.phase');
+  phase.classList.toggle('open');
+}
+
+// Celebration toast
+let celebrationTimeout;
+const celebrationMessages = [
+  'Yes! Eine geschafft 🎉',
+  'Läuft! 🔥',
+  'Weiter so 🚀',
+  'Top! 💪',
+  'Stark! ⭐',
+  'Genau so 🎯',
+  'Builder-Modus! 🛠',
+  'Yes Aleks! 🎊'
+];
+
+function showCelebration() {
+  const el = document.getElementById('celebration');
+  const text = celebrationMessages[Math.floor(Math.random() * celebrationMessages.length)];
+  document.getElementById('celebrationText').textContent = text;
+  el.classList.add('show');
+  clearTimeout(celebrationTimeout);
+  celebrationTimeout = setTimeout(() => el.classList.remove('show'), 1800);
+}
+
+// Confetti
+const confettiColors = ['#0066FF', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
+function fireConfetti(count = 20) {
+  for (let i = 0; i < count; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+    c.style.animationDelay = Math.random() * 0.3 + 's';
+    c.style.animationDuration = (2 + Math.random() * 1.5) + 's';
+    if (Math.random() > 0.5) c.style.borderRadius = '50%';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 3500);
+  }
+}
+
+function resetAll() {
+  if (confirm('Wirklich allen Fortschritt zurücksetzen?')) {
+    localStorage.removeItem(STORAGE_KEY);
+    state = {};
+    document.querySelectorAll('input[type="checkbox"]').forEach(box => {
+      box.checked = false;
+      box.closest('.task').classList.remove('done');
+    });
+    document.querySelectorAll('.phase').forEach(phase => {
+      phase.classList.remove('complete');
+      if (phase.dataset.phase !== '0') phase.classList.remove('open');
+    });
+    updateProgress();
+  }
+}
+
+init();
+</script>
+</body>
+</html>
